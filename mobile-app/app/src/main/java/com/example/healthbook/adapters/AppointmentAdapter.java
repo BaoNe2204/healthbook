@@ -40,6 +40,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         holder.tvDoctorName.setText(appointment.getDoctor().getName());
         holder.tvSpecialty.setText(appointment.getDoctor().getSpecialty() + " - " + appointment.getDoctor().getHospital());
         holder.tvTime.setText(appointment.getTime());
+        holder.tvStatus.setText(appointment.getStatus());
+        
+        // Update color based on status
+        if ("Sắp tới".equals(appointment.getStatus()) || "Đã duyệt".equals(appointment.getStatus())) {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
+        } else if ("Đã qua".equals(appointment.getStatus())) {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#9E9E9E")); // Gray
+        } else {
+            holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#FF9800")); // Orange (Chờ duyệt)
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.appointmentDetailFragment);
+        });
     }
 
     @Override
@@ -48,7 +62,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDay, tvMonth, tvDoctorName, tvSpecialty, tvTime;
+        TextView tvDay, tvMonth, tvDoctorName, tvSpecialty, tvTime, tvStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +71,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             tvDoctorName = itemView.findViewById(R.id.tvApptDoctorName);
             tvSpecialty = itemView.findViewById(R.id.tvApptSpecialty);
             tvTime = itemView.findViewById(R.id.tvApptTime);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
         }
     }
 }

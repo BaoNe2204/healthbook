@@ -12,6 +12,7 @@
         android:layout_height="?actionBarSize"
         android:background="@color/primary">
         <ImageView
+            android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"
@@ -46,6 +47,7 @@
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/surface"
@@ -69,6 +71,7 @@
     </com.google.android.material.tabs.TabLayout>
 
     <TextView
+        android:id="@+id/tvSuggestedTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

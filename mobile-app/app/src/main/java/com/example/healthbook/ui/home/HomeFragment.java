@@ -11,6 +11,7 @@ import com.example.healthbook.R;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
 import com.example.healthbook.adapters.HospitalAdapter;
 import com.example.healthbook.adapters.SpecialtyAdapter;
 import com.example.healthbook.data.MockData;
@@ -28,6 +29,26 @@ public class HomeFragment extends Fragment {
         RecyclerView rvHospitals = view.findViewById(R.id.rvHospitals);
         rvHospitals.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvHospitals.setAdapter(new HospitalAdapter(MockData.getHospitals()));
+
+        view.findViewById(R.id.btnBookAppointment).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.doctorSearchFragment);
+        });
+
+        view.findViewById(R.id.btnOnlineConsultation).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.onlineConsultationFragment);
+        });
+
+        view.findViewById(R.id.tvSeeAllSpecialties).setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putInt("tabIndex", 1);
+            Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
+        });
+
+        view.findViewById(R.id.tvSeeAllHospitals).setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putInt("tabIndex", 2);
+            Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
+        });
 
         return view;
     }

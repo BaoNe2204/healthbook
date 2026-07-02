@@ -9,10 +9,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.healthbook.R;
 
+import androidx.navigation.Navigation;
+
 public class BookingSuccessFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_booking_success, container, false);
+        View view = inflater.inflate(R.layout.fragment_booking_success, container, false);
+
+        View btnViewAppointments = view.findViewById(R.id.btnViewAppointments);
+        btnViewAppointments.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_appointments));
+
+        View btnBookOther = view.findViewById(R.id.btnBookOther);
+        btnBookOther.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.navigation_home));
+
+        return view;
     }
 }

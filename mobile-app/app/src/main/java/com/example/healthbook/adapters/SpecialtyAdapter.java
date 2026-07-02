@@ -30,6 +30,12 @@ public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.View
         Specialty specialty = specialties.get(position);
         holder.tvName.setText(specialty.getName());
         holder.ivIcon.setImageResource(specialty.getIconResId());
+        
+        holder.itemView.setOnClickListener(v -> {
+            android.os.Bundle args = new android.os.Bundle();
+            args.putString("specialtyName", specialty.getName());
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.specialtyDetailFragment, args);
+        });
     }
 
     @Override

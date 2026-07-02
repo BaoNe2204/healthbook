@@ -93,20 +93,33 @@
 
     <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
-    <com.google.android.material.button.MaterialButton
+    <!-- Nút hành động -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Xem lịch hẹn"
-        android:textSize="16sp"
-        app:cornerRadius="12dp" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="12dp"
-        android:text="Đặt lịch khác"
-        android:textSize="16sp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewAppointments"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Xem lịch hẹn"
+            android:textSize="16sp"
+            app:cornerRadius="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBookOther"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Trở về trang chủ"
+            android:textSize="16sp"
+            android:textColor="@color/primary"
+            app:strokeColor="@color/primary"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
 
 </LinearLayout>

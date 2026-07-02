@@ -24,6 +24,18 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(binding.navView, navController);
+
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.navigation_home ||
+                    destination.getId() == R.id.navigation_appointments ||
+                    destination.getId() == R.id.navigation_profile ||
+                    destination.getId() == R.id.navigation_notifications ||
+                    destination.getId() == R.id.navigation_account) {
+                    binding.navView.setVisibility(android.view.View.VISIBLE);
+                } else {
+                    binding.navView.setVisibility(android.view.View.GONE);
+                }
+            });
         }
     }
 }

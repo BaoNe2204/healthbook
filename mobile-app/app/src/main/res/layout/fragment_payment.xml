@@ -12,6 +12,7 @@
         android:layout_height="?actionBarSize"
         android:background="@color/primary">
         <ImageView
+            android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"
@@ -121,9 +122,10 @@
         android:elevation="8dp">
         
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPay"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Thanh toán 300.000đ"
+            android:text="Thanh toán 500.000đ"
             android:textSize="16sp"
             app:cornerRadius="12dp" />
     </LinearLayout>
