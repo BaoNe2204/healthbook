@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tài khoản"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+        <!-- User Profile Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/avatar_placeholder"
+                android:src="@android:drawable/ic_menu_myplaces" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Văn A"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="0123456789"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Menu List 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_rounded_white">
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Thông tin cá nhân"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_info_details"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Thành viên VIP"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/btn_star_big_on"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Người thân"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_myplaces"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Địa chỉ"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_mapmode"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Thanh toán"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_preferences"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Bảo hiểm y tế"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_agenda"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+        </LinearLayout>
+
+        <!-- Menu List 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_rounded_white">
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Cài đặt"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_manage"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Trung tâm hỗ trợ"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_help"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+                
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Đánh giá ứng dụng"
+                android:textColor="@color/text_primary"
+                android:drawableStart="@android:drawable/ic_menu_sort_by_size"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play" />
+        </LinearLayout>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:text="Đăng xuất"
+            android:textColor="@color/error"
+            android:textSize="16sp"
+            android:drawableStart="@android:drawable/ic_menu_close_clear_cancel"
+            android:drawablePadding="8dp" />
+            
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
