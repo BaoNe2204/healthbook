@@ -1,0 +1,50 @@
+package com.example.healthbook.adapters;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.healthbook.R;
+import com.example.healthbook.data.models.Specialty;
+import java.util.List;
+
+public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.ViewHolder> {
+    private List<Specialty> specialties;
+
+    public SpecialtyAdapter(List<Specialty> specialties) {
+        this.specialties = specialties;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_specialty, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Specialty specialty = specialties.get(position);
+        holder.tvName.setText(specialty.getName());
+        holder.ivIcon.setImageResource(specialty.getIconResId());
+    }
+
+    @Override
+    public int getItemCount() {
+        return specialties.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvName;
+        ImageView ivIcon;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvName = itemView.findViewById(R.id.tvSpecialtyName);
+            ivIcon = itemView.findViewById(R.id.ivSpecialtyIcon);
+        }
+    }
+}
