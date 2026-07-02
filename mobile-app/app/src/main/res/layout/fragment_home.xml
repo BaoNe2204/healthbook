@@ -104,12 +104,12 @@
             android:orientation="horizontal"
             android:weightSum="4">
             
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <LinearLayout android:id="@+id/btnBookAppointment" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
                 <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_my_calendar" app:tint="@color/primary" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt lịch khám" android:textAlignment="center" android:textSize="12sp" />
             </LinearLayout>
 
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <LinearLayout android:id="@+id/btnOnlineConsultation" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
                 <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_camera" app:tint="@color/primary" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Khám online" android:textAlignment="center" android:textSize="12sp" />
             </LinearLayout>
@@ -139,6 +139,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
             <TextView
+                android:id="@+id/tvSeeAllSpecialties"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -169,6 +170,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
             <TextView
+                android:id="@+id/tvSeeAllHospitals"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

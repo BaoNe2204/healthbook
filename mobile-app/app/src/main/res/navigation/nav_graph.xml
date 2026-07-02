@@ -33,4 +33,52 @@
         android:name="com.example.healthbook.ui.account.AccountFragment"
         android:label="Tài khoản"
         layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/doctorSearchFragment"
+        android:name="com.example.healthbook.ui.booking.DoctorSearchFragment"
+        android:label="Tìm bác sĩ"
+        layout="@layout/fragment_doctor_search" />
+
+    <fragment
+        android:id="@+id/timeSelectionFragment"
+        android:name="com.example.healthbook.ui.booking.TimeSelectionFragment"
+        android:label="Chọn giờ"
+        layout="@layout/fragment_time_selection" />
+
+    <fragment
+        android:id="@+id/appointmentConfirmFragment"
+        android:name="com.example.healthbook.ui.booking.AppointmentConfirmFragment"
+        android:label="Xác nhận"
+        layout="@layout/fragment_appointment_confirm" />
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.healthbook.ui.booking.PaymentFragment"
+        android:label="Thanh toán"
+        layout="@layout/fragment_payment" />
+
+    <fragment
+        android:id="@+id/bookingSuccessFragment"
+        android:name="com.example.healthbook.ui.booking.BookingSuccessFragment"
+        android:label="Thành công"
+        layout="@layout/fragment_booking_success" />
+
+    <fragment
+        android:id="@+id/onlineConsultationFragment"
+        android:name="com.example.healthbook.ui.booking.OnlineConsultationFragment"
+        android:label="Khám online"
+        layout="@layout/fragment_online_consultation" />
+
+    <fragment
+        android:id="@+id/specialtyDetailFragment"
+        android:name="com.example.healthbook.ui.specialty.SpecialtyDetailFragment"
+        android:label="Chi tiết chuyên khoa"
+        layout="@layout/fragment_specialty_detail" />
+
+    <fragment
+        android:id="@+id/appointmentDetailFragment"
+        android:name="com.example.healthbook.ui.appointments.AppointmentDetailFragment"
+        android:label="Chi tiết lịch hẹn"
+        layout="@layout/fragment_appointment_detail" />
 </navigation>

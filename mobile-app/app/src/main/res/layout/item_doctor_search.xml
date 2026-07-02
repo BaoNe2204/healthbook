@@ -23,6 +23,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvDoctorName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TS.BS Nguyễn Minh Đức"
@@ -31,6 +32,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvDoctorSpecialty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -39,6 +41,7 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/tvDoctorHospital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bệnh viện Bạch Mai"
@@ -59,6 +62,7 @@
                 app:tint="@color/warning" />
 
             <TextView
+                android:id="@+id/tvDoctorRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -68,6 +72,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvDoctorReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -78,6 +83,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBookDoctor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Đặt lịch"
