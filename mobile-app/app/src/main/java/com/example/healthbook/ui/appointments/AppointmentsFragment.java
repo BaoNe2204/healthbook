@@ -12,7 +12,10 @@ import com.example.healthbook.R;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthbook.adapters.AppointmentAdapter;
-import com.example.healthbook.data.MockData;
+import com.example.healthbook.data.ApiRepository;
+import com.example.healthbook.data.models.Appointment;
+import java.util.List;
+import android.util.Log;
 
 public class AppointmentsFragment extends Fragment {
     @Nullable
@@ -22,7 +25,17 @@ public class AppointmentsFragment extends Fragment {
         
         RecyclerView rvAppointments = view.findViewById(R.id.rvAppointments);
         rvAppointments.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvAppointments.setAdapter(new AppointmentAdapter(MockData.getAppointments()));
+        ApiRepository repo = new ApiRepository();
+        repo.getAppointments(new ApiRepository.Callback<List<Appointment>>() {
+            @Override
+            public void onSuccess(List<Appointment> result) {
+                rvAppointments.setAdapter(new AppointmentAdapter(result));
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("Appointments", "Failed to load", e);
+            }
+        });
         
         return view;
     }

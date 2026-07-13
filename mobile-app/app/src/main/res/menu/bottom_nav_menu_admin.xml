@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_admin_dashboard"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Tổng quan" />
+    <item
+        android:id="@+id/navigation_admin_users"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Người dùng" />
+    <item
+        android:id="@+id/navigation_admin_hospitals"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:title="Cơ sở Y tế" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Tài khoản" />
+</menu>

@@ -9,6 +9,8 @@ public class Doctor {
     private int reviewCount;
     private int imageResId;
 
+    public Doctor() {}
+
     public Doctor(String id, String name, String specialty, String hospital, double rating, int reviewCount, int imageResId) {
         this.id = id;
         this.name = name;
@@ -27,4 +29,13 @@ public class Doctor {
     public double getRating() { return rating; }
     public int getReviewCount() { return reviewCount; }
     public int getImageResId() { return imageResId; }
+
+    // Setters
+    public void setId(String id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setSpecialty(String specialty) { this.specialty = specialty; }
+    public void setHospital(String hospital) { this.hospital = hospital; }
+    public void setRating(double rating) { this.rating = rating; }
+    public void setReviewCount(int reviewCount) { this.reviewCount = reviewCount; }
+    public void setImageResId(int imageResId) { this.imageResId = imageResId; }
 }

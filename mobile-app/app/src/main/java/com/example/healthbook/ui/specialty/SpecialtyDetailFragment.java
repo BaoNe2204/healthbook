@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthbook.R;
 import com.example.healthbook.adapters.DoctorAdapter;
-import com.example.healthbook.data.MockData;
+import com.example.healthbook.data.ApiRepository;
 import com.example.healthbook.data.models.Doctor;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +29,16 @@ public class SpecialtyDetailFragment extends Fragment {
         ImageView btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
-        String specialtyName = "Chuyên khoa";
+        String specialtyNameTemp = "Chuyên khoa";
         if (getArguments() != null) {
-            specialtyName = getArguments().getString("specialtyName", "Chuyên khoa");
+            specialtyNameTemp = getArguments().getString("specialtyName", "Chuyên khoa");
         }
+        final String finalSpecialtyName = specialtyNameTemp;
 
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         TextView tvSpecialtyName = view.findViewById(R.id.tvSpecialtyName);
-        tvTitle.setText(specialtyName);
-        tvSpecialtyName.setText(specialtyName);
+        tvTitle.setText(finalSpecialtyName);
+        tvSpecialtyName.setText(finalSpecialtyName);
 
         View btnChat = view.findViewById(R.id.btnChat);
         btnChat.setOnClickListener(v -> {
@@ -45,24 +46,32 @@ public class SpecialtyDetailFragment extends Fragment {
         });
 
         // Filter doctors by specialty
-        List<Doctor> allDoctors = MockData.getDoctors();
-        List<Doctor> filteredDoctors = new ArrayList<>();
-        for (Doctor d : allDoctors) {
-            if (d.getSpecialty().toLowerCase().contains(specialtyName.toLowerCase()) || specialtyName.toLowerCase().contains(d.getSpecialty().toLowerCase())) {
-                filteredDoctors.add(d);
-            }
-        }
-        
-        // If no matches (mock data is limited), just show all to avoid empty list for demo
-        if (filteredDoctors.isEmpty()) {
-            filteredDoctors.addAll(allDoctors);
-        }
+        ApiRepository repo = new ApiRepository();
+        repo.getDoctors(new ApiRepository.Callback<List<Doctor>>() {
+            @Override
+            public void onSuccess(List<Doctor> allDoctors) {
+                List<Doctor> filteredDoctors = new ArrayList<>();
+                for (Doctor d : allDoctors) {
+                    if (d.getSpecialty() != null && (d.getSpecialty().toLowerCase().contains(finalSpecialtyName.toLowerCase()) || finalSpecialtyName.toLowerCase().contains(d.getSpecialty().toLowerCase()))) {
+                        filteredDoctors.add(d);
+                    }
+                }
+                
+                if (filteredDoctors.isEmpty()) {
+                    filteredDoctors.addAll(allDoctors);
+                }
 
-        RecyclerView rvDoctors = view.findViewById(R.id.rvDoctors);
-        rvDoctors.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvDoctors.setAdapter(new DoctorAdapter(filteredDoctors, doctor -> {
-            Navigation.findNavController(view).navigate(R.id.timeSelectionFragment);
-        }));
+                RecyclerView rvDoctors = view.findViewById(R.id.rvDoctors);
+                rvDoctors.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvDoctors.setAdapter(new DoctorAdapter(filteredDoctors, doctor -> {
+                    Navigation.findNavController(view).navigate(R.id.timeSelectionFragment);
+                }));
+            }
+            @Override
+            public void onFailure(Exception e) {}
+        });
+
+
 
         return view;
     }

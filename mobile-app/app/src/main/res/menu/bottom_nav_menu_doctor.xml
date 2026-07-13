@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_doctor_home"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Trang chủ BS" />
+    <item
+        android:id="@+id/navigation_doctor_schedule"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="Lịch rảnh" />
+    <item
+        android:id="@+id/navigation_doctor_appointments"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Ca khám" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Tài khoản" />
+</menu>

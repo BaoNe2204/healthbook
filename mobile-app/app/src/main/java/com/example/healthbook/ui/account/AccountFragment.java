@@ -8,9 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.healthbook.R;
-
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.navigation.Navigation;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AccountFragment extends Fragment {
     @Nullable
@@ -45,8 +48,20 @@ public class AccountFragment extends Fragment {
         view.findViewById(R.id.btnAppReview).setOnClickListener(v -> 
             Navigation.findNavController(v).navigate(R.id.action_account_to_appReview));
             
-        view.findViewById(R.id.btnLogout).setOnClickListener(v -> 
-            Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show());
+        TextView tvUserName = view.findViewById(R.id.tvUserName);
+        TextView tvUserEmail = view.findViewById(R.id.tvUserEmail);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            tvUserName.setText(user.getDisplayName() != null && !user.getDisplayName().isEmpty() ? user.getDisplayName() : "Người dùng HealthBook");
+            tvUserEmail.setText(user.getEmail());
+        }
+
+        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(v).navigate(R.id.loginFragment);
+        });
 
         return view;
     }

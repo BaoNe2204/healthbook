@@ -1,0 +1,19 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Firebase Service Account (KHÔNG ĐƯỢC COMMIT FILE NÀY LÊN GITHUB)
+serviceAccountKey.json
+
+# Environment variables
+.env
+
+# Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
