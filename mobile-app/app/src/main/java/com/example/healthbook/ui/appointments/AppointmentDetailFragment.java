@@ -22,7 +22,6 @@ public class AppointmentDetailFragment extends Fragment {
 
         View btnCancel = view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(v -> {
-            // Implementation for cancel will go here in backend phase
             Navigation.findNavController(v).popBackStack();
         });
 

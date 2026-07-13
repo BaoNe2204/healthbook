@@ -48,9 +48,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
         holder.itemView.setOnClickListener(v -> {
             int oldPos = selectedPosition;
-            selectedPosition = holder.getAdapterPosition();
-            notifyItemChanged(oldPos);
-            notifyItemChanged(selectedPosition);
+            int newPos = holder.getAdapterPosition();
+            if (newPos != RecyclerView.NO_POSITION) {
+                selectedPosition = newPos;
+                notifyItemChanged(oldPos);
+                notifyItemChanged(selectedPosition);
+            }
         });
     }
 
