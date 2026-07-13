@@ -32,7 +32,35 @@
         android:id="@+id/navigation_account"
         android:name="com.example.healthbook.ui.account.AccountFragment"
         android:label="Tài khoản"
-        layout="@layout/fragment_account" />
+        layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_account_to_personalInfo"
+            app:destination="@id/personalInfoFragment" />
+        <action
+            android:id="@+id/action_account_to_vipMember"
+            app:destination="@id/vipMemberFragment" />
+        <action
+            android:id="@+id/action_account_to_relatives"
+            app:destination="@id/relativesFragment" />
+        <action
+            android:id="@+id/action_account_to_address"
+            app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_account_to_paymentMethods"
+            app:destination="@id/paymentMethodsFragment" />
+        <action
+            android:id="@+id/action_account_to_healthInsurance"
+            app:destination="@id/healthInsuranceFragment" />
+        <action
+            android:id="@+id/action_account_to_settings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_account_to_supportCenter"
+            app:destination="@id/supportCenterFragment" />
+        <action
+            android:id="@+id/action_account_to_appReview"
+            app:destination="@id/appReviewFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/doctorSearchFragment"
@@ -81,4 +109,57 @@
         android:name="com.example.healthbook.ui.appointments.AppointmentDetailFragment"
         android:label="Chi tiết lịch hẹn"
         layout="@layout/fragment_appointment_detail" />
+    <fragment
+        android:id="@+id/personalInfoFragment"
+        android:name="com.example.healthbook.ui.account.PersonalInfoFragment"
+        android:label="Thông tin cá nhân"
+        layout="@layout/fragment_personal_info" />
+
+    <fragment
+        android:id="@+id/vipMemberFragment"
+        android:name="com.example.healthbook.ui.account.VipMemberFragment"
+        android:label="Thành viên VIP"
+        layout="@layout/fragment_vip_member" />
+
+    <fragment
+        android:id="@+id/relativesFragment"
+        android:name="com.example.healthbook.ui.account.RelativesFragment"
+        android:label="Người thân"
+        layout="@layout/fragment_relatives" />
+
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.healthbook.ui.account.AddressFragment"
+        android:label="Địa chỉ"
+        layout="@layout/fragment_address" />
+
+    <fragment
+        android:id="@+id/paymentMethodsFragment"
+        android:name="com.example.healthbook.ui.account.PaymentMethodsFragment"
+        android:label="Thanh toán"
+        layout="@layout/fragment_payment_methods" />
+
+    <fragment
+        android:id="@+id/healthInsuranceFragment"
+        android:name="com.example.healthbook.ui.account.HealthInsuranceFragment"
+        android:label="Bảo hiểm y tế"
+        layout="@layout/fragment_health_insurance" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.healthbook.ui.account.SettingsFragment"
+        android:label="Cài đặt"
+        layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/supportCenterFragment"
+        android:name="com.example.healthbook.ui.account.SupportCenterFragment"
+        android:label="Trung tâm hỗ trợ"
+        layout="@layout/fragment_support_center" />
+
+    <fragment
+        android:id="@+id/appReviewFragment"
+        android:name="com.example.healthbook.ui.account.AppReviewFragment"
+        android:label="Đánh giá ứng dụng"
+        layout="@layout/fragment_app_review" />
 </navigation>

@@ -9,10 +9,45 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.healthbook.R;
 
+import android.widget.Toast;
+import androidx.navigation.Navigation;
+
 public class AccountFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        view.findViewById(R.id.btnPersonalInfo).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_personalInfo));
+            
+        view.findViewById(R.id.btnVipMember).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_vipMember));
+            
+        view.findViewById(R.id.btnRelatives).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_relatives));
+            
+        view.findViewById(R.id.btnAddress).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_address));
+            
+        view.findViewById(R.id.btnPaymentMethods).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_paymentMethods));
+            
+        view.findViewById(R.id.btnHealthInsurance).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_healthInsurance));
+            
+        view.findViewById(R.id.btnSettings).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_settings));
+            
+        view.findViewById(R.id.btnSupportCenter).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_supportCenter));
+            
+        view.findViewById(R.id.btnAppReview).setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.action_account_to_appReview));
+            
+        view.findViewById(R.id.btnLogout).setOnClickListener(v -> 
+            Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show());
+
+        return view;
     }
 }
