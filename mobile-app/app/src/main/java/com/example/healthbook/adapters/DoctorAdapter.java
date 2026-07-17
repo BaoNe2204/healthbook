@@ -45,6 +45,12 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
                 listener.onBookClick(doctor);
             }
         });
+        
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onBookClick(doctor);
+            }
+        });
     }
 
     @Override

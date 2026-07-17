@@ -10,10 +10,10 @@ import java.util.List;
 public class MockData {
     public static List<Doctor> getDoctors() {
         List<Doctor> list = new ArrayList<>();
-        list.add(new Doctor("1", "TS.BS Nguyễn Minh Đức", "Tim mạch", "Bệnh viện Bạch Mai", 4.9, 1000, android.R.drawable.ic_menu_camera));
-        list.add(new Doctor("2", "BS.CKII Trần Thị Hằng", "Nhi khoa", "Bệnh viện Nhi Trung Ương", 4.8, 800, android.R.drawable.ic_menu_camera));
-        list.add(new Doctor("3", "BS.CKI Lê Văn Thành", "Cơ xương khớp", "Bệnh viện Việt Đức", 4.9, 500, android.R.drawable.ic_menu_camera));
-        list.add(new Doctor("4", "BS.CKI Phạm Thị Mai", "Da liễu", "Phòng khám tư", 4.7, 300, android.R.drawable.ic_menu_camera));
+        list.add(new Doctor("1", "TS.BS Nguyễn Minh Đức", "Tim mạch", "Bệnh viện Bạch Mai", 4.9, 1000, android.R.drawable.ic_menu_camera, 15, 500000, "Bác sĩ có nhiều năm kinh nghiệm."));
+        list.add(new Doctor("2", "BS.CKII Trần Thị Hằng", "Nhi khoa", "Bệnh viện Nhi Trung Ương", 4.8, 800, android.R.drawable.ic_menu_camera, 10, 300000, "Bác sĩ tận tâm với trẻ nhỏ."));
+        list.add(new Doctor("3", "BS.CKI Lê Văn Thành", "Cơ xương khớp", "Bệnh viện Việt Đức", 4.9, 500, android.R.drawable.ic_menu_camera, 8, 250000, "Chuyên gia về các bệnh cơ xương khớp."));
+        list.add(new Doctor("4", "BS.CKI Phạm Thị Mai", "Da liễu", "Phòng khám tư", 4.7, 300, android.R.drawable.ic_menu_camera, 5, 200000, "Điều trị dứt điểm các bệnh da liễu."));
         return list;
     }
 
@@ -44,6 +44,14 @@ public class MockData {
         list.add(new Hospital("1", "Bệnh viện Bạch Mai", "78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội"));
         list.add(new Hospital("2", "Bệnh viện Việt Đức", "40 Tràng Thi, Hàng Bông, Hoàn Kiếm, Hà Nội"));
         list.add(new Hospital("3", "Bệnh viện Nhi Trung Ương", "18/879 La Thành, Láng Thượng, Đống Đa, Hà Nội"));
+        return list;
+    }
+
+    public static List<com.example.healthbook.data.models.Clinic> getClinics() {
+        List<com.example.healthbook.data.models.Clinic> list = new ArrayList<>();
+        list.add(new com.example.healthbook.data.models.Clinic("1", "Phòng khám Đa khoa Quốc tế Thu Cúc", "286 Thụy Khuê, Tây Hồ, Hà Nội"));
+        list.add(new com.example.healthbook.data.models.Clinic("2", "Phòng khám Đa khoa Vietlife", "14 Trần Bình Trọng, Hoàn Kiếm, Hà Nội"));
+        list.add(new com.example.healthbook.data.models.Clinic("3", "Phòng khám Da liễu Thẩm mỹ Mai Skin", "123 Phố Huế, Hai Bà Trưng, Hà Nội"));
         return list;
     }
 }

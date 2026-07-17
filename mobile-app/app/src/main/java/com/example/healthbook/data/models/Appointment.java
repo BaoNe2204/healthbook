@@ -7,6 +7,10 @@ public class Appointment {
     private String time;
     private String status; // Sắp tới, Đã qua
     private String type; // Khám tại bệnh viện, Khám online
+    private String patient_name;
+    private String patient_phone;
+    private String patient_dob;
+    private String patient_gender;
 
     public Appointment() {}
 
@@ -32,4 +36,12 @@ public class Appointment {
     public void setTime(String time) { this.time = time; }
     public void setStatus(String status) { this.status = status; }
     public void setType(String type) { this.type = type; }
+    public String getPatient_name() { return patient_name; }
+    public void setPatient_name(String patient_name) { this.patient_name = patient_name; }
+    public String getPatient_phone() { return patient_phone; }
+    public void setPatient_phone(String patient_phone) { this.patient_phone = patient_phone; }
+    public String getPatient_dob() { return patient_dob; }
+    public void setPatient_dob(String patient_dob) { this.patient_dob = patient_dob; }
+    public String getPatient_gender() { return patient_gender; }
+    public void setPatient_gender(String patient_gender) { this.patient_gender = patient_gender; }
 }

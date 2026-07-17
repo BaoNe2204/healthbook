@@ -1,6 +1,8 @@
 package com.example.healthbook.data.models;
 
-public class Doctor {
+import java.io.Serializable;
+
+public class Doctor implements Serializable {
     private String id;
     private String name;
     private String specialty;
@@ -8,10 +10,14 @@ public class Doctor {
     private double rating;
     private int reviewCount;
     private int imageResId;
+    
+    private int experience;
+    private int price;
+    private String description;
 
     public Doctor() {}
 
-    public Doctor(String id, String name, String specialty, String hospital, double rating, int reviewCount, int imageResId) {
+    public Doctor(String id, String name, String specialty, String hospital, double rating, int reviewCount, int imageResId, int experience, int price, String description) {
         this.id = id;
         this.name = name;
         this.specialty = specialty;
@@ -19,6 +25,9 @@ public class Doctor {
         this.rating = rating;
         this.reviewCount = reviewCount;
         this.imageResId = imageResId;
+        this.experience = experience;
+        this.price = price;
+        this.description = description;
     }
 
     // Getters
@@ -29,6 +38,9 @@ public class Doctor {
     public double getRating() { return rating; }
     public int getReviewCount() { return reviewCount; }
     public int getImageResId() { return imageResId; }
+    public int getExperience() { return experience; }
+    public int getPrice() { return price; }
+    public String getDescription() { return description; }
 
     // Setters
     public void setId(String id) { this.id = id; }
@@ -38,4 +50,7 @@ public class Doctor {
     public void setRating(double rating) { this.rating = rating; }
     public void setReviewCount(int reviewCount) { this.reviewCount = reviewCount; }
     public void setImageResId(int imageResId) { this.imageResId = imageResId; }
+    public void setExperience(int experience) { this.experience = experience; }
+    public void setPrice(int price) { this.price = price; }
+    public void setDescription(String description) { this.description = description; }
 }

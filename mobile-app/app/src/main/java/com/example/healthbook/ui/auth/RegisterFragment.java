@@ -79,14 +79,21 @@ public class RegisterFragment extends Fragment {
                                         .enqueue(new Callback<Void>() {
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response) {
-                                                Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                                Navigation.findNavController(view).navigate(R.id.navigation_home);
+                                                if (response.isSuccessful()) {
+                                                    Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                                    Navigation.findNavController(view).navigate(R.id.navigation_home);
+                                                } else {
+                                                    try {
+                                                        Toast.makeText(getContext(), "Lỗi server: " + response.errorBody().string(), Toast.LENGTH_LONG).show();
+                                                    } catch (Exception e) {
+                                                        Toast.makeText(getContext(), "Lỗi server: " + response.code(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
                                             }
 
                                             @Override
                                             public void onFailure(Call<Void> call, Throwable t) {
-                                                Toast.makeText(getContext(), "Lỗi lưu db: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                                Navigation.findNavController(view).navigate(R.id.navigation_home);
+                                                Toast.makeText(getContext(), "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }

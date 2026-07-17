@@ -48,14 +48,16 @@ public class DoctorSearchFragment extends Fragment {
             @Override
             public void onSuccess(List<Doctor> result) {
                 DoctorAdapter doctorAdapter = new DoctorAdapter(result, doctor -> {
-                    Navigation.findNavController(view).navigate(R.id.timeSelectionFragment);
+                    Bundle args = new Bundle();
+                    args.putSerializable("doctor", doctor);
+                    Navigation.findNavController(view).navigate(R.id.doctorProfileFragment, args);
                 });
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     rvList.setAdapter(doctorAdapter);
                 }
                 
                 // Update tab selection logic
-                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, doctorAdapter, null, null);
+                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, doctorAdapter, null, null, null);
             }
             @Override
             public void onFailure(Exception e) {
@@ -70,7 +72,20 @@ public class DoctorSearchFragment extends Fragment {
                 if (tabLayout.getSelectedTabPosition() == 1) {
                     rvList.setAdapter(specialtyAdapter);
                 }
-                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, null, specialtyAdapter, null);
+                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, null, specialtyAdapter, null, null);
+            }
+            @Override
+            public void onFailure(Exception e) {}
+        });
+
+        repo.getClinics(new ApiRepository.Callback<List<com.example.healthbook.data.models.Clinic>>() {
+            @Override
+            public void onSuccess(List<com.example.healthbook.data.models.Clinic> result) {
+                com.example.healthbook.adapters.ClinicSearchAdapter clinicAdapter = new com.example.healthbook.adapters.ClinicSearchAdapter(result);
+                if (tabLayout.getSelectedTabPosition() == 2) {
+                    rvList.setAdapter(clinicAdapter);
+                }
+                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, null, null, clinicAdapter, null);
             }
             @Override
             public void onFailure(Exception e) {}
@@ -80,10 +95,10 @@ public class DoctorSearchFragment extends Fragment {
             @Override
             public void onSuccess(List<Hospital> result) {
                 HospitalAdapter hospitalAdapter = new HospitalAdapter(result);
-                if (tabLayout.getSelectedTabPosition() == 2) {
+                if (tabLayout.getSelectedTabPosition() == 3) {
                     rvList.setAdapter(hospitalAdapter);
                 }
-                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, null, null, hospitalAdapter);
+                setupTabSelection(tabLayout, rvList, tvSuggestedTitle, null, null, null, hospitalAdapter);
             }
             @Override
             public void onFailure(Exception e) {}
@@ -108,12 +123,14 @@ public class DoctorSearchFragment extends Fragment {
 
     private DoctorAdapter currentDoctorAdapter;
     private SpecialtyAdapter currentSpecialtyAdapter;
+    private com.example.healthbook.adapters.ClinicSearchAdapter currentClinicAdapter;
     private HospitalAdapter currentHospitalAdapter;
     private TabLayout.OnTabSelectedListener currentTabListener;
 
-    private void setupTabSelection(TabLayout tabLayout, RecyclerView rvList, TextView tvSuggestedTitle, DoctorAdapter dAdapter, SpecialtyAdapter sAdapter, HospitalAdapter hAdapter) {
+    private void setupTabSelection(TabLayout tabLayout, RecyclerView rvList, TextView tvSuggestedTitle, DoctorAdapter dAdapter, SpecialtyAdapter sAdapter, com.example.healthbook.adapters.ClinicSearchAdapter cAdapter, HospitalAdapter hAdapter) {
         if (dAdapter != null) currentDoctorAdapter = dAdapter;
         if (sAdapter != null) currentSpecialtyAdapter = sAdapter;
+        if (cAdapter != null) currentClinicAdapter = cAdapter;
         if (hAdapter != null) currentHospitalAdapter = hAdapter;
 
         if (currentTabListener != null) {
@@ -135,6 +152,11 @@ public class DoctorSearchFragment extends Fragment {
                         if (currentSpecialtyAdapter != null) rvList.setAdapter(currentSpecialtyAdapter);
                         break;
                     case 2:
+                        tvSuggestedTitle.setText("Phòng khám nổi bật");
+                        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+                        if (currentClinicAdapter != null) rvList.setAdapter(currentClinicAdapter);
+                        break;
+                    case 3:
                         tvSuggestedTitle.setText("Bệnh viện nổi bật");
                         rvList.setLayoutManager(new GridLayoutManager(getContext(), 2));
                         if (currentHospitalAdapter != null) rvList.setAdapter(currentHospitalAdapter);

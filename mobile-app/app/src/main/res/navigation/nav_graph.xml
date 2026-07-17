@@ -69,6 +69,30 @@
         layout="@layout/fragment_doctor_search" />
 
     <fragment
+        android:id="@+id/doctorProfileFragment"
+        android:name="com.example.healthbook.ui.doctor.DoctorProfileFragment"
+        android:label="Chi tiết Bác sĩ"
+        layout="@layout/fragment_doctor_profile" />
+
+    <fragment
+        android:id="@+id/clinicProfileFragment"
+        android:name="com.example.healthbook.ui.doctor.ClinicProfileFragment"
+        android:label="Chi tiết Phòng khám"
+        layout="@layout/fragment_clinic_profile" />
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.healthbook.ui.doctor.ChatFragment"
+        android:label="Chat"
+        layout="@layout/fragment_chat" />
+
+    <fragment
+        android:id="@+id/bookingFlowFragment"
+        android:name="com.example.healthbook.ui.booking.BookingFlowFragment"
+        android:label="Đặt khám"
+        layout="@layout/fragment_booking_flow" />
+
+    <fragment
         android:id="@+id/timeSelectionFragment"
         android:name="com.example.healthbook.ui.booking.TimeSelectionFragment"
         android:label="Chọn giờ"

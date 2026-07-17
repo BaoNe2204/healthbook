@@ -24,6 +24,28 @@ public class PaymentFragment extends Fragment {
         View btnPay = view.findViewById(R.id.btnPay);
         btnPay.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.bookingSuccessFragment));
 
+        if (getArguments() != null) {
+            String date = getArguments().getString("bookingDate", "");
+            String time = getArguments().getString("bookingTime", "");
+            String price = getArguments().getString("bookingPrice", "300.000đ");
+            
+            if (!date.isEmpty() && !time.isEmpty()) {
+                android.widget.TextView tvPaymentTime = view.findViewById(R.id.tvPaymentTime);
+                if (tvPaymentTime != null) {
+                    tvPaymentTime.setText(time + " - " + date);
+                }
+            }
+            
+            android.widget.TextView tvTotalPrice = view.findViewById(R.id.tvPaymentTotalPrice);
+            if (tvTotalPrice != null) {
+                tvTotalPrice.setText(price);
+            }
+            
+            if (btnPay instanceof android.widget.Button) {
+                ((android.widget.Button) btnPay).setText("Thanh toán " + price);
+            }
+        }
+
         return view;
     }
 }
