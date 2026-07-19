@@ -111,4 +111,13 @@ public class ApiRepository {
             }
         });
     }
+
+    public void getClinics(Callback<List<com.example.healthbook.data.models.Clinic>> callback) {
+        // Since backend might not have this yet, return from MockData
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getClinics());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
+    }
 }

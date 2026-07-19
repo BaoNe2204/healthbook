@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- Custom Toolbar -->
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Thông tin bác sĩ"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_menu_save"
+                app:tint="@android:color/white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Lưu lại"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+                
+            <View
+                android:layout_width="1dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="12dp"
+                android:background="#80FFFFFF" />
+                
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_menu_help"
+                app:tint="@android:color/white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Hỗ trợ"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomActions"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Profile Info Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivDoctorAvatar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@mipmap/ic_launcher_round" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ThS. BS"
+                        android:textColor="#757575"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvDoctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lê Anh Tuấn"
+                        android:textColor="@color/text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@android:drawable/checkbox_on_background"
+                            app:tint="@color/primary" />
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="Bác sĩ"
+                            android:textColor="@color/primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvExperience"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="31 năm kinh nghiệm"
+                        android:textColor="#424242"
+                        android:textSize="14sp" />
+                        
+                    <TextView
+                        android:id="@+id/tvHospital"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Bác sĩ Niệu Khoa - Nam Khoa - Phẫu thuật viên vi phẫu"
+                        android:textColor="#424242"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Specialty Chips -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chuyên khoa:"
+                    android:textColor="#757575"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvSpecialty1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_chip_gray"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:text="Nam khoa"
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvSpecialty2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_chip_gray"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:text="Ngoại niệu"
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#EEEEEE" />
+
+            <!-- Notice Box (Lưu ý) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#FFF8E1"
+                android:orientation="vertical"
+                android:padding="12dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@android:drawable/ic_dialog_alert"
+                        app:tint="#F57C00" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="Lưu ý"
+                        android:textColor="#F57C00"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@android:drawable/arrow_up_float"
+                        app:tint="#F57C00" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Phòng khám Nam khoa thay đổi lịch khám..."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Address and Map -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F5F5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="23 Nguyễn Văn Đậu, Phường 5, Quận Phú Nhuận, Hồ Chí Minh"
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_chip_green"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp">
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@android:drawable/ic_dialog_map"
+                        app:tint="@android:color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Mở bản đồ"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ACCORDION SECTIONS -->
+            
+            <!-- 1. Phí dịch vụ -->
+            <LinearLayout android:id="@+id/headerPrice" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Phí dịch vụ" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowPrice" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentPrice" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Đặt khám" android:textColor="#424242" android:textSize="14sp" />
+                <TextView android:id="@+id/tvPriceInfo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="500.000đ" android:textColor="#424242" android:textSize="14sp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 2. Giờ làm việc -->
+            <LinearLayout android:id="@+id/headerHours" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Giờ làm việc" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowHours" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentHours" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvWorkingHours" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Thứ 2 đến Thứ 5: 17:30 - 19:30\nThứ 7: 9:00 - 11:00" android:textColor="#424242" android:textSize="14sp" android:lineSpacingExtra="4dp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 3. Giới thiệu -->
+            <LinearLayout android:id="@+id/headerIntro" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_info_details" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Giới thiệu" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowIntro" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentIntro" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvAccordionIntro" android:layout_width="match_parent" android:layout_height="wrap_content" android:lineSpacingExtra="4dp" android:text="Thông tin giới thiệu về bác sĩ..." android:textColor="#424242" android:textSize="14sp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 4. Chuyên khám -->
+            <LinearLayout android:id="@+id/headerSpecialties" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/btn_star" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Chuyên khám" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowSpecialties" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentSpecialties" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvAccordionSpecialties" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="• Rối loạn cương dương\n• Rối loạn khoái cảm\n• Rối loạn xuất tinh" android:textColor="#424242" android:textSize="14sp" android:lineSpacingExtra="8dp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 5. Nơi công tác -->
+            <LinearLayout android:id="@+id/headerWorkplace" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_dialog_map" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Nơi công tác" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowWorkplace" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentWorkplace" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvAccordionHospital" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="• Bệnh viện FV" android:textColor="#424242" android:textSize="14sp" android:lineSpacingExtra="8dp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 6. Quá trình đào tạo -->
+            <LinearLayout android:id="@+id/headerEducation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Quá trình đào tạo" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowEducation" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentEducation" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvAccordionEducation" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="• 1989 - 1995: Tốt nghiệp Y khoa ĐH Y Dược TP.HCM\n• 2006: Thạc sĩ Niệu khoa" android:textColor="#424242" android:textSize="14sp" android:lineSpacingExtra="8dp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+            <!-- 7. Kinh nghiệm -->
+            <LinearLayout android:id="@+id/headerExperience" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingVertical="8dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_sort_by_size" app:tint="#424242" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Kinh nghiệm" android:textColor="#424242" android:textSize="15sp" android:textStyle="bold" />
+                <ImageView android:id="@+id/arrowExperience" android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/arrow_up_float" app:tint="#BDBDBD" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/contentExperience" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="28dp" android:paddingTop="4dp" android:paddingBottom="12dp">
+                <TextView android:id="@+id/tvAccordionExperience" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="• 1995 - 1998: BV Trưng Vương\n• 1999 - 2006: TTYK Medic" android:textColor="#424242" android:textSize="14sp" android:lineSpacingExtra="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Actions -->
+    <LinearLayout
+        android:id="@+id/bottomActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_outline"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lịch khám"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lịch tháng 07/2026"
+                android:textColor="#424242"
+                android:textSize="14sp" />
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="4dp"
+                android:src="@android:drawable/arrow_down_float"
+                app:tint="@color/primary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnChat"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_button_chat"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/stat_notify_chat"
+                app:tint="@color/primary" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Chat với bác sĩ"
+                android:textColor="@color/primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="#D6D6D6"
+                android:text="Gọi video"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+
+            <Button
+                android:id="@+id/btnBook"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/primary"
+                android:text="Đặt khám"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

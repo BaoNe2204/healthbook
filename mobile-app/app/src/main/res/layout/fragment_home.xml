@@ -97,33 +97,78 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Features Grid -->
+        <!-- Features Grid (Redesign 3 columns) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="4">
+            android:orientation="vertical">
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                
+                <LinearLayout android:id="@+id/btnBookAppointment" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_yellow" android:padding="12dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt khám\nbác sĩ" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btnBookClinic" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_blue" android:padding="12dp" android:src="@android:drawable/ic_menu_search" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt khám\nphòng khám" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btnBookHospital" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_pink" android:padding="12dp" android:src="@android:drawable/ic_dialog_map" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt khám\nbệnh viện" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                
+                <LinearLayout android:id="@+id/btnChatWithDoctor" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_cyan" android:padding="12dp" android:src="@android:drawable/stat_notify_chat" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Chat với\nbác sĩ" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btnOnlineConsultation" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_purple" android:padding="12dp" android:src="@android:drawable/ic_menu_camera" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Khám online" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_teal" android:padding="12dp" android:src="@android:drawable/ic_menu_agenda" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Hồ sơ\nsức khoẻ" android:textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
             
-            <LinearLayout android:id="@+id/btnBookAppointment" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_my_calendar" app:tint="@color/primary" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt lịch khám" android:textAlignment="center" android:textSize="12sp" />
-            </LinearLayout>
+            <!-- Row 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_circle_red" android:padding="12dp" android:src="@android:drawable/ic_menu_add" app:tint="@android:color/white" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Đặt lịch\nTiêm chủng" textAlignment="center" android:textSize="12sp" />
+                </LinearLayout>
 
-            <LinearLayout android:id="@+id/btnOnlineConsultation" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_camera" app:tint="@color/primary" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Khám online" android:textAlignment="center" android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/primary" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Bác sĩ" android:textAlignment="center" android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
-                <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@color/secondary" android:padding="12dp" android:src="@android:drawable/ic_menu_info_details" app:tint="@color/primary" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Gói khám" android:textAlignment="center" android:textSize="12sp" />
+                <View android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                <View android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
             </LinearLayout>
         </LinearLayout>
 

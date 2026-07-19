@@ -65,8 +65,30 @@ public class HomeFragment extends Fragment {
             Navigation.findNavController(v).navigate(R.id.doctorSearchFragment);
         });
 
+        View btnBookClinic = view.findViewById(R.id.btnBookClinic);
+        if (btnBookClinic != null) {
+            btnBookClinic.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putInt("tabIndex", 2);
+                Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
+            });
+        }
+        
+        View btnBookHospital = view.findViewById(R.id.btnBookHospital);
+        if (btnBookHospital != null) {
+            btnBookHospital.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putInt("tabIndex", 3);
+                Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
+            });
+        }
+
         view.findViewById(R.id.btnOnlineConsultation).setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.onlineConsultationFragment);
+        });
+
+        view.findViewById(R.id.btnChatWithDoctor).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.chatFragment);
         });
 
         view.findViewById(R.id.tvSeeAllSpecialties).setOnClickListener(v -> {
@@ -77,7 +99,7 @@ public class HomeFragment extends Fragment {
 
         view.findViewById(R.id.tvSeeAllHospitals).setOnClickListener(v -> {
             Bundle args = new Bundle();
-            args.putInt("tabIndex", 2);
+            args.putInt("tabIndex", 3);
             Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
         });
 

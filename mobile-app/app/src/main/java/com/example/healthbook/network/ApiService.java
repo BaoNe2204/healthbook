@@ -34,4 +34,7 @@ public interface ApiService {
 
     @GET("/api/users/profile")
     Call<com.example.healthbook.data.models.UserProfile> getUserProfile();
+
+    @retrofit2.http.PUT("/api/users/profile")
+    Call<Void> updateUserProfile(@Body com.example.healthbook.data.models.UserProfile profile);
 }
