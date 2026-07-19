@@ -1,15 +1,47 @@
 package com.example.healthbook.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Appointment {
+    @SerializedName("id")
     private String id;
+    
     private Doctor doctor;
+    
+    @SerializedName("doctor_id")
+    private int doctor_id;
+    
+    @SerializedName("doctorName")
+    private String doctorName;
+    
+    @SerializedName("specialty")
+    private String specialty;
+    
+    @SerializedName("hospital")
+    private String hospital;
+
+    @SerializedName("appointment_date")
     private String date;
+
+    @SerializedName("appointment_time")
     private String time;
+
+    @SerializedName("status")
     private String status; // Sắp tới, Đã qua
+
+    @SerializedName("type")
     private String type; // Khám tại bệnh viện, Khám online
+
+    @SerializedName("patient_name")
     private String patient_name;
+
+    @SerializedName("patient_phone")
     private String patient_phone;
+
+    @SerializedName("patient_dob")
     private String patient_dob;
+
+    @SerializedName("patient_gender")
     private String patient_gender;
 
     public Appointment() {}
@@ -21,21 +53,54 @@ public class Appointment {
         this.time = time;
         this.status = status;
         this.type = type;
+        if (doctor != null) {
+            try {
+                this.doctor_id = Integer.parseInt(doctor.getId());
+            } catch (Exception e) {
+                this.doctor_id = 0;
+            }
+            this.doctorName = doctor.getName();
+            this.specialty = doctor.getSpecialty();
+            this.hospital = doctor.getHospital();
+        }
     }
 
     public String getId() { return id; }
-    public Doctor getDoctor() { return doctor; }
+    
+    public Doctor getDoctor() { 
+        if (doctor == null && doctorName != null) {
+            doctor = new Doctor(String.valueOf(doctor_id), doctorName, specialty, hospital, 4.8, 100, 0, 5, 300000, "");
+        }
+        return doctor; 
+    }
+    
     public String getDate() { return date; }
     public String getTime() { return time; }
     public String getStatus() { return status; }
     public String getType() { return type; }
 
     public void setId(String id) { this.id = id; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public void setDoctor(Doctor doctor) { 
+        this.doctor = doctor; 
+        if (doctor != null) {
+            try {
+                this.doctor_id = Integer.parseInt(doctor.getId());
+            } catch (Exception e) {
+                this.doctor_id = 0;
+            }
+            this.doctorName = doctor.getName();
+            this.specialty = doctor.getSpecialty();
+            this.hospital = doctor.getHospital();
+        }
+    }
     public void setDate(String date) { this.date = date; }
     public void setTime(String time) { this.time = time; }
     public void setStatus(String status) { this.status = status; }
     public void setType(String type) { this.type = type; }
+    
+    public int getDoctorId() { return doctor_id; }
+    public void setDoctorId(int doctor_id) { this.doctor_id = doctor_id; }
+    
     public String getPatient_name() { return patient_name; }
     public void setPatient_name(String patient_name) { this.patient_name = patient_name; }
     public String getPatient_phone() { return patient_phone; }
@@ -45,3 +110,4 @@ public class Appointment {
     public String getPatient_gender() { return patient_gender; }
     public void setPatient_gender(String patient_gender) { this.patient_gender = patient_gender; }
 }
+

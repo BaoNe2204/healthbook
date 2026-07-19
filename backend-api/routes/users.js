@@ -93,6 +93,21 @@ router.post('/register', verifyToken, async (req, res) => {
                 VALUES (@id, @email, @name, @role)
             `);
 
+        // Nếu đăng ký là bác sĩ, thêm vào bảng Doctors để liên kết
+        if (isDoctorRegistration) {
+            try {
+                await pool.request()
+                    .input('name', sql.NVarChar, name)
+                    .input('user_id', sql.NVarChar, uid)
+                    .query(`
+                        INSERT INTO Doctors (name, user_id, rating, reviewCount, imageResId)
+                        VALUES (@name, @user_id, 5.0, 0, 0)
+                    `);
+            } catch (err) {
+                console.error("Error creating Doctor profile link:", err);
+            }
+        }
+
         const userData = {
             uid: uid,
             email: email,

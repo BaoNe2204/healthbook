@@ -17,9 +17,16 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private List<String> dates;
     private int selectedPosition = 0;
 
-    public DateAdapter(List<String> days, List<String> dates) {
+    public interface OnDateSelectedListener {
+        void onDateSelected(String date);
+    }
+
+    private OnDateSelectedListener listener;
+
+    public DateAdapter(List<String> days, List<String> dates, OnDateSelectedListener listener) {
         this.days = days;
         this.dates = dates;
+        this.listener = listener;
     }
 
     @NonNull
@@ -53,6 +60,9 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
                 selectedPosition = newPos;
                 notifyItemChanged(oldPos);
                 notifyItemChanged(selectedPosition);
+                if (listener != null) {
+                    listener.onDateSelected(dates.get(selectedPosition));
+                }
             }
         });
     }
@@ -60,6 +70,13 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return dates.size();
+    }
+
+    public String getSelectedDate() {
+        if (selectedPosition >= 0 && selectedPosition < dates.size()) {
+            return dates.get(selectedPosition);
+        }
+        return "";
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

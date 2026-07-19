@@ -76,6 +76,30 @@ app.get('/api/appointments', verifyToken, async (req, res) => {
     }
 });
 
+// GET Patient's Medical Records
+app.get('/api/users/medical-records', verifyToken, async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const patientId = req.user.uid;
+
+        const result = await pool.request()
+            .input('patient_id', sql.NVarChar, patientId)
+            .query(`
+                SELECT mr.*, d.name as doctorName, d.specialty, d.hospital, a.appointment_date, a.appointment_time
+                FROM MedicalRecords mr
+                LEFT JOIN Doctors d ON mr.doctor_id = d.id
+                LEFT JOIN Appointments a ON mr.appointment_id = a.id
+                WHERE mr.patient_id = @patient_id OR mr.patient_id IN (
+                    SELECT CAST(id AS NVARCHAR(100)) FROM Appointments WHERE patient_id = @patient_id
+                )
+                ORDER BY mr.created_at DESC
+            `);
+        res.json(result.recordset);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // POST Appointments (Create new appointment) - Requires Auth & Patient Role (or just Auth for now)
 app.post('/api/appointments', verifyToken, async (req, res) => {
     try {
@@ -103,6 +127,33 @@ app.post('/api/appointments', verifyToken, async (req, res) => {
         data.id = result.recordset[0].id;
         data.patient_id = patientId;
         res.status(201).json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Doctor's Schedule for a specific date
+app.get('/api/doctors/:id/schedule', async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const doctorId = req.params.id;
+        const date = req.query.date;
+
+        if (!date) {
+            return res.status(400).json({ error: 'date query parameter is required' });
+        }
+
+        const result = await pool.request()
+            .input('doctor_id', sql.Int, doctorId)
+            .input('date', sql.NVarChar, date)
+            .query('SELECT time_slots FROM Schedules WHERE doctor_id = @doctor_id AND available_date = @date');
+
+        if (result.recordset.length === 0) {
+            res.json([]);
+        } else {
+            const slots = result.recordset[0].time_slots.split(',');
+            res.json(slots);
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

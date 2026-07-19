@@ -25,6 +25,13 @@ public class ProfileFragment extends Fragment {
             tvUserName.setText(user.getDisplayName());
         }
 
+        View.OnClickListener goToHistory = v -> {
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.medicalHistoryFragment);
+        };
+
+        view.findViewById(R.id.btnMedicalHistory).setOnClickListener(goToHistory);
+        view.findViewById(R.id.btnPrescriptions).setOnClickListener(goToHistory);
+
         return view;
     }
 }
