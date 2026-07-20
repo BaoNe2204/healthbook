@@ -17,6 +17,9 @@ public interface ApiService {
     @GET("/api/doctors")
     Call<List<Doctor>> getDoctors();
 
+    @GET("/api/doctors/{id}/schedule")
+    Call<List<String>> getDoctorSchedule(@retrofit2.http.Path("id") String doctorId, @retrofit2.http.Query("date") String date);
+
     @GET("/api/specialties")
     Call<List<Specialty>> getSpecialties();
 
@@ -37,4 +40,36 @@ public interface ApiService {
 
     @retrofit2.http.PUT("/api/users/profile")
     Call<Void> updateUserProfile(@Body com.example.healthbook.data.models.UserProfile profile);
+
+    @GET("/api/users/medical-records")
+    Call<List<com.example.healthbook.data.models.MedicalRecord>> getMedicalRecords();
+
+    // Doctor Panel Endpoints
+    @GET("/api/doctor/appointments")
+    Call<List<Appointment>> getDoctorAppointments();
+
+    @retrofit2.http.PUT("/api/doctor/appointments/{id}/status")
+    Call<Void> updateAppointmentStatus(@retrofit2.http.Path("id") String id, @Body Map<String, String> body);
+
+    @POST("/api/doctor/schedule")
+    Call<Void> updateDoctorSchedule(@Body Map<String, Object> body);
+
+    @POST("/api/doctor/medical-records")
+    Call<Void> createMedicalRecord(@Body Map<String, Object> body);
+
+    // Admin Panel Endpoints
+    @GET("/api/admin/dashboard")
+    Call<Map<String, Object>> getAdminDashboard();
+
+    @GET("/api/admin/users")
+    Call<List<com.example.healthbook.data.models.UserProfile>> getAdminUsers();
+
+    @retrofit2.http.PUT("/api/admin/users/{uid}/ban")
+    Call<Void> banUser(@retrofit2.http.Path("uid") String uid, @Body Map<String, Boolean> body);
+
+    @POST("/api/admin/hospitals")
+    Call<Void> createHospital(@Body Map<String, Object> body);
+
+    @POST("/api/admin/specialties")
+    Call<Void> createSpecialty(@Body Map<String, Object> body);
 }

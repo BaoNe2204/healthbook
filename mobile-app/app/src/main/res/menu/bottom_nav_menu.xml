@@ -14,7 +14,7 @@
         android:title="Hồ sơ" />
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@android:drawable/ic_popup_reminder"
+        android:icon="@drawable/ic_bell"
         android:title="Thông báo" />
     <item
         android:id="@+id/navigation_account"

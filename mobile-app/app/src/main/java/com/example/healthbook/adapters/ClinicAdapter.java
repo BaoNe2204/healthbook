@@ -30,6 +30,11 @@ public class ClinicAdapter extends RecyclerView.Adapter<ClinicAdapter.ViewHolder
         holder.tvName.setText(clinic.getName());
         holder.tvAddress.setText(clinic.getAddress());
 
+        // Set a random beautiful clinic image
+        int[] images = {R.drawable.clinic_img_1, R.drawable.clinic_img_2, R.drawable.clinic_img_3};
+        int randomImage = images[Math.abs(clinic.getName().hashCode()) % images.length];
+        holder.ivHospitalImage.setImageResource(randomImage);
+
         holder.itemView.setOnClickListener(v -> {
             android.os.Bundle args = new android.os.Bundle();
             args.putSerializable("clinic", clinic);
@@ -44,11 +49,13 @@ public class ClinicAdapter extends RecyclerView.Adapter<ClinicAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvAddress;
+        android.widget.ImageView ivHospitalImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvHospitalName);
             tvAddress = itemView.findViewById(R.id.tvHospitalAddress);
+            ivHospitalImage = itemView.findViewById(R.id.ivHospitalImage);
         }
     }
 }

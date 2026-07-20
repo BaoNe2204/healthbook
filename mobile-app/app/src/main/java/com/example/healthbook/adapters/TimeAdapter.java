@@ -53,6 +53,13 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
         return times.size();
     }
 
+    public String getSelectedTime() {
+        if (selectedPosition >= 0 && selectedPosition < times.size()) {
+            return times.get(selectedPosition);
+        }
+        return "";
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTime;
 

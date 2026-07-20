@@ -1,4 +1,5 @@
 const { getAuth } = require('firebase-admin/auth');
+const { sql, poolPromise } = require('../db-config');
 
 async function verifyToken(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -18,17 +19,24 @@ async function verifyToken(req, res, next) {
 
 function requireRole(role) {
     return async (req, res, next) => {
-        // We will fetch the role from Firestore based on req.user.uid
-        const { db } = require('../firebase-config');
         try {
-            const userDoc = await db.collection('users').doc(req.user.uid).get();
-            if (!userDoc.exists) {
+            const pool = await poolPromise;
+            const result = await pool.request()
+                .input('id', sql.NVarChar, req.user.uid)
+                .query('SELECT * FROM Users WHERE id = @id');
+            
+            if (result.recordset.length === 0) {
                 return res.status(403).json({ error: 'User record not found in database' });
             }
-            const userData = userDoc.data();
-            if (userData.role !== role && userData.role !== 'admin') {
+            
+            const userData = result.recordset[0];
+            const userRole = userData.role ? userData.role.toUpperCase() : 'PATIENT';
+            const requiredRole = role.toUpperCase();
+            
+            if (userRole !== requiredRole && userRole !== 'ADMIN') {
                 return res.status(403).json({ error: `Forbidden: Requires ${role} role` });
             }
+            
             req.userData = userData; // attach db user data to request
             next();
         } catch (error) {

@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment == null) return;
         NavController navController = navHostFragment.getNavController();
 
-        if (role.equals("admin")) {
+        if (role.equalsIgnoreCase("admin")) {
             binding.navView.inflateMenu(R.menu.bottom_nav_menu_admin);
             navController.navigate(R.id.navigation_admin_dashboard);
-        } else if (role.equals("doctor")) {
+        } else if (role.equalsIgnoreCase("doctor")) {
             binding.navView.inflateMenu(R.menu.bottom_nav_menu_doctor);
             navController.navigate(R.id.navigation_doctor_home);
         } else {

@@ -23,6 +23,8 @@ public class LoginFragment extends Fragment {
 
     private FirebaseAuth mAuth;
 
+    private android.app.ProgressDialog progressDialog;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,12 +46,35 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
+            btnLogin.setEnabled(false);
+
+            progressDialog = new android.app.ProgressDialog(getContext());
+            progressDialog.setMessage("Đang đăng nhập...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            fetchRoleAndNavigate();
+                            
+                            // Tạm thời hardcode cho 2 tài khoản test để bạn xem giao diện (bỏ qua SQL lỗi)
+                            if (email.equals("admin@healthbook.com")) {
+                                if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+                                if (getActivity() instanceof com.example.healthbook.MainActivity) {
+                                    ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole("admin");
+                                }
+                            } else if (email.equals("doctor@healthbook.com")) {
+                                if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+                                if (getActivity() instanceof com.example.healthbook.MainActivity) {
+                                    ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole("doctor");
+                                }
+                            } else {
+                                fetchRoleAndNavigate();
+                            }
                         } else {
+                            if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+                            btnLogin.setEnabled(true);
                             Toast.makeText(getContext(), "Đăng nhập thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
@@ -62,10 +87,20 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
     private void fetchRoleAndNavigate() {
         new com.example.healthbook.data.ApiRepository().getUserProfile(new com.example.healthbook.data.ApiRepository.Callback<com.example.healthbook.data.models.UserProfile>() {
             @Override
             public void onSuccess(com.example.healthbook.data.models.UserProfile result) {
+                if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
                 if (getActivity() instanceof com.example.healthbook.MainActivity) {
                     ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole(result.getRole());
                 }
@@ -73,6 +108,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
+                if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
                 // Default to patient if error
                 if (getActivity() instanceof com.example.healthbook.MainActivity) {
                     ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole("patient");

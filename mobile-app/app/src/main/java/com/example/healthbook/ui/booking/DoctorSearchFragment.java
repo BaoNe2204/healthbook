@@ -127,11 +127,40 @@ public class DoctorSearchFragment extends Fragment {
     private HospitalAdapter currentHospitalAdapter;
     private TabLayout.OnTabSelectedListener currentTabListener;
 
+    private void refreshCurrentTab(TabLayout tabLayout, RecyclerView rvList, TextView tvSuggestedTitle) {
+        if (getContext() == null) return;
+        int pos = tabLayout.getSelectedTabPosition();
+        switch (pos) {
+            case 0:
+                tvSuggestedTitle.setText("Bác sĩ gợi ý cho bạn");
+                rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+                if (currentDoctorAdapter != null) rvList.setAdapter(currentDoctorAdapter);
+                break;
+            case 1:
+                tvSuggestedTitle.setText("Chuyên khoa phổ biến");
+                rvList.setLayoutManager(new GridLayoutManager(getContext(), 4));
+                if (currentSpecialtyAdapter != null) rvList.setAdapter(currentSpecialtyAdapter);
+                break;
+            case 2:
+                tvSuggestedTitle.setText("Phòng khám nổi bật");
+                rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+                if (currentClinicAdapter != null) rvList.setAdapter(currentClinicAdapter);
+                break;
+            case 3:
+                tvSuggestedTitle.setText("Bệnh viện nổi bật");
+                rvList.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                if (currentHospitalAdapter != null) rvList.setAdapter(currentHospitalAdapter);
+                break;
+        }
+    }
+
     private void setupTabSelection(TabLayout tabLayout, RecyclerView rvList, TextView tvSuggestedTitle, DoctorAdapter dAdapter, SpecialtyAdapter sAdapter, com.example.healthbook.adapters.ClinicSearchAdapter cAdapter, HospitalAdapter hAdapter) {
         if (dAdapter != null) currentDoctorAdapter = dAdapter;
         if (sAdapter != null) currentSpecialtyAdapter = sAdapter;
         if (cAdapter != null) currentClinicAdapter = cAdapter;
         if (hAdapter != null) currentHospitalAdapter = hAdapter;
+
+        refreshCurrentTab(tabLayout, rvList, tvSuggestedTitle);
 
         if (currentTabListener != null) {
             tabLayout.removeOnTabSelectedListener(currentTabListener);

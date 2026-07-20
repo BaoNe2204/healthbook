@@ -235,4 +235,10 @@
         android:label="Cơ sở Y tế"
         layout="@layout/fragment_admin_hospitals" />
 
+    <fragment
+        android:id="@+id/medicalHistoryFragment"
+        android:name="com.example.healthbook.ui.profile.MedicalHistoryFragment"
+        android:label="Lịch sử bệnh án"
+        layout="@layout/fragment_medical_history" />
+
 </navigation>
