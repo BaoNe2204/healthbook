@@ -90,6 +90,7 @@
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginVertical="12dp"/>
                 
                 <EditText 
+                    android:id="@+id/edtHealthCondition"
                     android:layout_width="match_parent" 
                     android:layout_height="wrap_content" 
                     android:minHeight="80dp"

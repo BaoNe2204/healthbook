@@ -169,7 +169,28 @@ public class DoctorSearchFragment extends Fragment {
         currentTabListener = new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                refreshCurrentTab(tabLayout, rvList, tvSuggestedTitle);
+                switch (tab.getPosition()) {
+                    case 0:
+                        tvSuggestedTitle.setText("Bác sĩ gợi ý cho bạn");
+                        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+                        rvList.setAdapter(currentDoctorAdapter);
+                        break;
+                    case 1:
+                        tvSuggestedTitle.setText("Chuyên khoa phổ biến");
+                        rvList.setLayoutManager(new GridLayoutManager(getContext(), 4));
+                        rvList.setAdapter(currentSpecialtyAdapter);
+                        break;
+                    case 2:
+                        tvSuggestedTitle.setText("Phòng khám nổi bật");
+                        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+                        rvList.setAdapter(currentClinicAdapter);
+                        break;
+                    case 3:
+                        tvSuggestedTitle.setText("Bệnh viện nổi bật");
+                        rvList.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                        rvList.setAdapter(currentHospitalAdapter);
+                        break;
+                }
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
