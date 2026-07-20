@@ -23,19 +23,35 @@ public class ApiRepository {
     }
 
     public void getDoctors(Callback<List<Doctor>> callback) {
-        callback.onSuccess(com.example.healthbook.data.MockData.getDoctors());
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getDoctors());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getSpecialties(Callback<List<Specialty>> callback) {
-        callback.onSuccess(com.example.healthbook.data.MockData.getSpecialties());
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getSpecialties());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getHospitals(Callback<List<Hospital>> callback) {
-        callback.onSuccess(com.example.healthbook.data.MockData.getHospitals());
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getHospitals());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getAppointments(Callback<List<Appointment>> callback) {
-        callback.onSuccess(com.example.healthbook.data.MockData.getAppointments());
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getAppointments());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getUserProfile(Callback<com.example.healthbook.data.models.UserProfile> callback) {

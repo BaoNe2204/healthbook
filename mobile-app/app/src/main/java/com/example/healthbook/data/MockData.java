@@ -17,13 +17,35 @@ public class MockData {
         return list;
     }
 
+    private static List<Appointment> cachedAppointments = null;
+
     public static List<Appointment> getAppointments() {
-        List<Appointment> list = new ArrayList<>();
-        List<Doctor> doctors = getDoctors();
-        list.add(new Appointment("A1", doctors.get(0), "15/05/2024", "08:30 - 09:00", "Sắp tới", "Khám tại bệnh viện"));
-        list.add(new Appointment("A2", doctors.get(1), "05/05/2024", "14:00 - 14:30", "Đã qua", "Khám tại bệnh viện"));
-        list.add(new Appointment("A3", doctors.get(2), "20/04/2024", "09:00 - 09:30", "Đã qua", "Khám online"));
-        return list;
+        if (cachedAppointments == null) {
+            cachedAppointments = new ArrayList<>();
+            List<Doctor> doctors = getDoctors();
+            cachedAppointments.add(new Appointment("A1", doctors.get(0), "15/05/2024", "08:30 - 09:00", "Sắp tới", "Khám tại bệnh viện"));
+            cachedAppointments.add(new Appointment("A2", doctors.get(1), "05/05/2024", "14:00 - 14:30", "Đã qua", "Khám tại bệnh viện"));
+            cachedAppointments.add(new Appointment("A3", doctors.get(2), "20/04/2024", "09:00 - 09:30", "Đã qua", "Khám online"));
+        }
+        return cachedAppointments;
+    }
+    
+    public static void addAppointment(Appointment appointment) {
+        if (cachedAppointments == null) {
+            getAppointments();
+        }
+        cachedAppointments.add(0, appointment); // Add to top
+    }
+    
+    public static void removeAppointment(String id) {
+        if (cachedAppointments != null) {
+            for (int i = 0; i < cachedAppointments.size(); i++) {
+                if (cachedAppointments.get(i).getId().equals(id)) {
+                    cachedAppointments.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     public static List<Specialty> getSpecialties() {

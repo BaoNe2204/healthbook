@@ -1,9 +1,6 @@
 package com.example.healthbook.data.models;
 
-import com.google.gson.annotations.SerializedName;
-
-public class Appointment {
-    @SerializedName("id")
+public class Appointment implements java.io.Serializable {
     private String id;
     
     private Doctor doctor;

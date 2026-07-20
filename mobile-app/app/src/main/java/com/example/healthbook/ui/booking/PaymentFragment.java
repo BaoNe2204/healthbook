@@ -32,6 +32,32 @@ public class PaymentFragment extends Fragment {
         btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
         View btnPay = view.findViewById(R.id.btnPay);
+        btnPay.setOnClickListener(v -> {
+            if (getArguments() != null) {
+                String date = getArguments().getString("bookingDate", "Hôm nay");
+                String time = getArguments().getString("bookingTime", "08:00");
+                String healthCondition = getArguments().getString("healthCondition", "Khám tổng quát");
+                
+                com.example.healthbook.data.models.Doctor doctor = null;
+                if (getArguments().containsKey("doctor")) {
+                    doctor = (com.example.healthbook.data.models.Doctor) getArguments().getSerializable("doctor");
+                }
+                if (doctor == null) {
+                    doctor = com.example.healthbook.data.MockData.getDoctors().get(0); 
+                }
+                
+                com.example.healthbook.data.models.Appointment newAppt = new com.example.healthbook.data.models.Appointment(
+                    "A" + System.currentTimeMillis(),
+                    doctor,
+                    date,
+                    time,
+                    "Sắp tới",
+                    healthCondition.isEmpty() ? "Khám tại bệnh viện" : healthCondition
+                );
+                com.example.healthbook.data.MockData.addAppointment(newAppt);
+            }
+            Navigation.findNavController(v).navigate(R.id.bookingSuccessFragment);
+        });
 
         // Fetch details for saving
         String date = "";

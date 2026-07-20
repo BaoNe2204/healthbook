@@ -81,25 +81,25 @@
                 android:layout_marginBottom="24dp">
                 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thời gian khám" android:textColor="@color/text_secondary" android:textSize="12sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thứ 4, 29/05/2024 - 08:30" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                <TextView android:id="@+id/tvConfirmTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thứ 4, 29/05/2024 - 08:30" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
                 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginVertical="12dp"/>
                 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Địa điểm khám" android:textColor="@color/text_secondary" android:textSize="12sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bệnh viện Bạch Mai" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                <TextView android:id="@+id/tvConfirmHospital" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bệnh viện Bạch Mai" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                <TextView android:id="@+id/tvConfirmAddress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
                 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginVertical="12dp"/>
                 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thông tin bệnh nhân" android:textColor="@color/text_secondary" android:textSize="12sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nguyễn Văn A" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nam - 28/05/1995" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0123456789" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                <TextView android:id="@+id/tvConfirmPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nguyễn Văn A" android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                <TextView android:id="@+id/tvConfirmPatientDobGender" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nam - 28/05/1995" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                <TextView android:id="@+id/tvConfirmPatientPhone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0123456789" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
                 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginVertical="12dp"/>
                 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mô tả tình trạng sức khỏe" android:textColor="@color/text_secondary" android:textSize="12sp"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thường xuyên đau đầu, chóng mặt khi đứng lên ngồi xuống. Đã kéo dài 2 tuần." android:textColor="@color/text_primary" android:textSize="14sp" android:layout_marginTop="4dp"/>
+                <TextView android:id="@+id/tvConfirmHealthCondition" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thường xuyên đau đầu, chóng mặt khi đứng lên ngồi xuống. Đã kéo dài 2 tuần." android:textColor="@color/text_primary" android:textSize="14sp" android:layout_marginTop="4dp"/>
                 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginVertical="12dp"/>
                 
@@ -114,6 +114,7 @@
                         android:textSize="14sp"
                         android:layout_centerVertical="true"/>
                     <TextView
+                        android:id="@+id/tvConfirmPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
