@@ -1,53 +1,44 @@
-const { db } = require('./firebase-config');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getAuth } = require('firebase-admin/auth');
+const serviceAccount = require('./serviceAccountKey.json');
+initializeApp({ credential: cert(serviceAccount) });
 
-if (!db) {
-    console.error("Firebase DB is not initialized. Please ensure serviceAccountKey.json is present.");
-    process.exit(1);
-}
-
-const mockDoctors = [
-    { id: "1", name: "TS.BS Nguyễn Minh Đức", specialty: "Tim mạch", hospital: "Bệnh viện Bạch Mai", rating: 4.9, reviewCount: 1000, imageResId: 17301508 },
-    { id: "2", name: "BS.CKII Trần Thị Hằng", specialty: "Nhi khoa", hospital: "Bệnh viện Nhi Trung Ương", rating: 4.8, reviewCount: 800, imageResId: 17301508 },
-    { id: "3", name: "BS.CKI Lê Văn Thành", specialty: "Cơ xương khớp", hospital: "Bệnh viện Việt Đức", rating: 4.9, reviewCount: 500, imageResId: 17301508 },
-    { id: "4", name: "BS.CKI Phạm Thị Mai", specialty: "Da liễu", hospital: "Phòng khám tư", rating: 4.7, reviewCount: 300, imageResId: 17301508 }
-];
-
-const mockSpecialties = [
-    { id: "1", name: "Tim mạch", iconResId: 17301584 },
-    { id: "2", name: "Nhi khoa", iconResId: 17301584 },
-    { id: "3", name: "Da liễu", iconResId: 17301584 },
-    { id: "4", name: "Sản phụ khoa", iconResId: 17301584 }
-];
-
-const mockHospitals = [
-    { id: "1", name: "Bệnh viện Bạch Mai", address: "78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội" },
-    { id: "2", name: "Bệnh viện Việt Đức", address: "40 Tràng Thi, Hàng Bông, Hoàn Kiếm, Hà Nội" },
-    { id: "3", name: "Bệnh viện Nhi Trung Ương", address: "18/879 La Thành, Láng Thượng, Đống Đa, Hà Nội" }
-];
-
-async function seedData() {
+async function seed() {
     try {
-        console.log("Seeding Doctors...");
-        for (const doc of mockDoctors) {
-            await db.collection('doctors').doc(doc.id).set(doc);
-        }
-        
-        console.log("Seeding Specialties...");
-        for (const spec of mockSpecialties) {
-            await db.collection('specialties').doc(spec.id).set(spec);
+        const auth = getAuth();
+        let adminUid = null;
+        try {
+            const admin = await auth.createUser({ email: 'admin@healthbook.com', password: 'password123', displayName: 'Admin' });
+            adminUid = admin.uid;
+        } catch (e) {
+            if(e.code === 'auth/email-already-exists') {
+                const user = await auth.getUserByEmail('admin@healthbook.com');
+                adminUid = user.uid;
+                await auth.updateUser(adminUid, { password: 'password123' });
+            } else throw e;
         }
 
-        console.log("Seeding Hospitals...");
-        for (const hosp of mockHospitals) {
-            await db.collection('hospitals').doc(hosp.id).set(hosp);
+        let docUid = null;
+        try {
+            const doc = await auth.createUser({ email: 'doctor@healthbook.com', password: 'password123', displayName: 'Dr. John' });
+            docUid = doc.uid;
+        } catch (e) {
+            if(e.code === 'auth/email-already-exists') {
+                const user = await auth.getUserByEmail('doctor@healthbook.com');
+                docUid = user.uid;
+                await auth.updateUser(docUid, { password: 'password123' });
+            } else throw e;
         }
-        
-        console.log("Seeding Completed Successfully!");
+
+        console.log('✅ Accounts created in Firebase Auth:');
+        console.log('ADMIN: admin@healthbook.com / password123');
+        console.log('DOCTOR: doctor@healthbook.com / password123');
+        console.log('\n❌ SQL Server is not automatically reachable from this script. Please run the following SQL queries in your SQL Server database to grant them roles:');
+        console.log(`\nINSERT INTO Users (id, email, displayName, role) VALUES ('${adminUid}', 'admin@healthbook.com', 'Admin', 'ADMIN');\nINSERT INTO Users (id, email, displayName, role) VALUES ('${docUid}', 'doctor@healthbook.com', 'Dr. John', 'DOCTOR');`);
         process.exit(0);
-    } catch (error) {
-        console.error("Error seeding data:", error);
+    } catch(e) {
+        console.error(e);
         process.exit(1);
     }
 }
-
-seedData();
+seed();

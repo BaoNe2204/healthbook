@@ -38,6 +38,11 @@ public class ClinicSearchAdapter extends RecyclerView.Adapter<ClinicSearchAdapte
         holder.tvName.setText(clinic.getName());
         holder.tvAddress.setText(clinic.getAddress());
 
+        // Set a random beautiful clinic image
+        int[] images = {R.drawable.clinic_img_1, R.drawable.clinic_img_2, R.drawable.clinic_img_3};
+        int randomImage = images[Math.abs(clinic.getName().hashCode()) % images.length];
+        holder.ivHospitalImage.setImageResource(randomImage);
+
         // Dummy specialties for UI
         holder.chipGroupSpecialties.removeAllViews();
         List<String> mockSpecialties = Arrays.asList("Đa khoa", "Sản - Phụ khoa", "Da liễu", "Nhi khoa", "Nội tiết");
@@ -83,6 +88,7 @@ public class ClinicSearchAdapter extends RecyclerView.Adapter<ClinicSearchAdapte
         TextView tvName, tvAddress;
         LinearLayout chipGroupSpecialties;
         View btnBook;
+        android.widget.ImageView ivHospitalImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +96,7 @@ public class ClinicSearchAdapter extends RecyclerView.Adapter<ClinicSearchAdapte
             tvAddress = itemView.findViewById(R.id.tvHospitalAddress);
             chipGroupSpecialties = itemView.findViewById(R.id.chipGroupSpecialties);
             btnBook = itemView.findViewById(R.id.btnBook);
+            ivHospitalImage = itemView.findViewById(R.id.ivHospitalImage);
         }
     }
 }

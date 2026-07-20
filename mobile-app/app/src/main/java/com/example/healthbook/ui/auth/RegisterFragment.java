@@ -60,6 +60,11 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
+            android.app.ProgressDialog progressDialog = new android.app.ProgressDialog(getContext());
+            progressDialog.setMessage("Đang xử lý...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -79,9 +84,11 @@ public class RegisterFragment extends Fragment {
                                         .enqueue(new Callback<Void>() {
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response) {
+                                                progressDialog.dismiss();
                                                 if (response.isSuccessful()) {
-                                                    Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                                    Navigation.findNavController(view).navigate(R.id.navigation_home);
+                                                    Toast.makeText(getContext(), "Đăng ký thành công! Vui lòng đăng nhập.", Toast.LENGTH_LONG).show();
+                                                    mAuth.signOut(); // Sign out so they can log in again
+                                                    Navigation.findNavController(view).navigate(R.id.loginFragment);
                                                 } else {
                                                     try {
                                                         Toast.makeText(getContext(), "Lỗi server: " + response.errorBody().string(), Toast.LENGTH_LONG).show();
@@ -93,11 +100,13 @@ public class RegisterFragment extends Fragment {
 
                                             @Override
                                             public void onFailure(Call<Void> call, Throwable t) {
+                                                progressDialog.dismiss();
                                                 Toast.makeText(getContext(), "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
                         } else {
+                            progressDialog.dismiss();
                             Toast.makeText(getContext(), "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
