@@ -22,8 +22,89 @@ public class AppointmentDetailFragment extends Fragment {
 
         View btnCancel = view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(v -> {
-            Navigation.findNavController(v).popBackStack();
+            new android.app.AlertDialog.Builder(getContext())
+                .setTitle("Hủy lịch hẹn")
+                .setMessage("Bạn có chắc chắn muốn hủy lịch hẹn này không?")
+                .setPositiveButton("Hủy lịch", (dialog, which) -> {
+                    if (getArguments() != null && getArguments().containsKey("appointment")) {
+                        com.example.healthbook.data.models.Appointment appt = (com.example.healthbook.data.models.Appointment) getArguments().getSerializable("appointment");
+                        if (appt != null) {
+                            com.example.healthbook.data.MockData.removeAppointment(appt.getId());
+                            android.widget.Toast.makeText(getContext(), "Đã hủy lịch hẹn thành công!", android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    Navigation.findNavController(v).popBackStack();
+                })
+                .setNegativeButton("Không", null)
+                .show();
         });
+
+        if (getArguments() != null && getArguments().containsKey("appointment")) {
+            com.example.healthbook.data.models.Appointment appointment = (com.example.healthbook.data.models.Appointment) getArguments().getSerializable("appointment");
+            if (appointment != null) {
+                // Set Status
+                android.widget.TextView tvStatus = view.findViewById(R.id.tvStatus);
+                if (tvStatus != null) {
+                    tvStatus.setText(appointment.getStatus());
+                    if ("Sắp tới".equals(appointment.getStatus()) || "Đã duyệt".equals(appointment.getStatus())) {
+                        tvStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
+                    } else if ("Đã qua".equals(appointment.getStatus())) {
+                        tvStatus.setTextColor(android.graphics.Color.parseColor("#9E9E9E")); // Gray
+                    } else {
+                        tvStatus.setTextColor(android.graphics.Color.parseColor("#FF9800")); // Orange
+                    }
+                }
+                
+                // Doctor info
+                if (appointment.getDoctor() != null) {
+                    android.widget.TextView tvDoctorName = view.findViewById(R.id.tvDoctorName);
+                    if (tvDoctorName != null) tvDoctorName.setText(appointment.getDoctor().getName());
+                    android.widget.TextView tvDoctorSpecialty = view.findViewById(R.id.tvDoctorSpecialty);
+                    if (tvDoctorSpecialty != null) tvDoctorSpecialty.setText(appointment.getDoctor().getSpecialty());
+                    android.widget.TextView tvDoctorHospital = view.findViewById(R.id.tvDoctorHospital);
+                    if (tvDoctorHospital != null) tvDoctorHospital.setText(appointment.getDoctor().getHospital());
+                    
+                    android.widget.TextView tvConfirmHospital = view.findViewById(R.id.tvConfirmHospital);
+                    if (tvConfirmHospital != null) tvConfirmHospital.setText(appointment.getDoctor().getHospital());
+                    
+                    int price = appointment.getDoctor().getPrice() > 0 ? appointment.getDoctor().getPrice() : 300000;
+                    android.widget.TextView tvConfirmPrice = view.findViewById(R.id.tvConfirmPrice);
+                    if (tvConfirmPrice != null) tvConfirmPrice.setText(String.format("%,d", price).replace(',', '.') + "đ");
+                }
+                
+                // Time
+                android.widget.TextView tvConfirmTime = view.findViewById(R.id.tvConfirmTime);
+                if (tvConfirmTime != null) {
+                    tvConfirmTime.setText(appointment.getTime() + " - " + appointment.getDate());
+                }
+                
+                // Health condition (reason)
+                android.widget.TextView tvConfirmHealthCondition = view.findViewById(R.id.tvConfirmHealthCondition);
+                if (tvConfirmHealthCondition != null) {
+                    tvConfirmHealthCondition.setText(appointment.getType());
+                }
+                
+                // Patient Info (from SharedPreferences for now)
+                android.content.SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", android.content.Context.MODE_PRIVATE);
+                String name = prefs.getString("fullName", "");
+                String phone = prefs.getString("phone", "");
+                String dob = prefs.getString("dob", "");
+                String gender = prefs.getString("gender", "");
+                
+                com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+                if (name.isEmpty() && user != null && user.getDisplayName() != null) name = user.getDisplayName();
+                if (phone.isEmpty() && user != null && user.getPhoneNumber() != null) phone = user.getPhoneNumber();
+                
+                android.widget.TextView tvConfirmPatientName = view.findViewById(R.id.tvConfirmPatientName);
+                if (tvConfirmPatientName != null && !name.isEmpty()) tvConfirmPatientName.setText(name);
+                
+                android.widget.TextView tvConfirmPatientDobGender = view.findViewById(R.id.tvConfirmPatientDobGender);
+                if (tvConfirmPatientDobGender != null && !dob.isEmpty() && !gender.isEmpty()) tvConfirmPatientDobGender.setText(gender + " - " + dob);
+                
+                android.widget.TextView tvConfirmPatientPhone = view.findViewById(R.id.tvConfirmPatientPhone);
+                if (tvConfirmPatientPhone != null && !phone.isEmpty()) tvConfirmPatientPhone.setText(phone);
+            }
+        }
 
         return view;
     }

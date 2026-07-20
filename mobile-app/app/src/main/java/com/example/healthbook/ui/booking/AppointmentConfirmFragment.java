@@ -22,7 +22,14 @@ public class AppointmentConfirmFragment extends Fragment {
         btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
         View btnConfirm = view.findViewById(R.id.btnConfirm);
-        btnConfirm.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.paymentFragment, getArguments()));
+        btnConfirm.setOnClickListener(v -> {
+            Bundle args = getArguments() != null ? new Bundle(getArguments()) : new Bundle();
+            android.widget.EditText edtHealthCondition = view.findViewById(R.id.edtHealthCondition);
+            if (edtHealthCondition != null) {
+                args.putString("healthCondition", edtHealthCondition.getText().toString());
+            }
+            Navigation.findNavController(v).navigate(R.id.paymentFragment, args);
+        });
 
         if (getArguments() != null) {
             String date = getArguments().getString("bookingDate", "");

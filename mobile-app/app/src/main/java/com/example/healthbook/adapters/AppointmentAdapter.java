@@ -52,7 +52,9 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         }
 
         holder.itemView.setOnClickListener(v -> {
-            androidx.navigation.Navigation.findNavController(v).navigate(R.id.appointmentDetailFragment);
+            android.os.Bundle bundle = new android.os.Bundle();
+            bundle.putSerializable("appointment", appointment);
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.appointmentDetailFragment, bundle);
         });
     }
 

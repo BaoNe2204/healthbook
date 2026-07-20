@@ -18,6 +18,9 @@ import com.example.healthbook.adapters.TimeAdapter;
 import java.util.Arrays;
 import java.util.List;
 
+import android.widget.TextView;
+import com.example.healthbook.data.models.Doctor;
+
 public class TimeSelectionFragment extends Fragment {
     @Nullable
     @Override
@@ -27,8 +30,27 @@ public class TimeSelectionFragment extends Fragment {
         View btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
 
+        String priceStr = "300.000đ";
+        if (getArguments() != null && getArguments().containsKey("doctor")) {
+            Doctor doctor = (Doctor) getArguments().getSerializable("doctor");
+            if (doctor != null) {
+                int price = doctor.getPrice() > 0 ? doctor.getPrice() : 300000;
+                priceStr = String.format("%,d", price).replace(',', '.') + "đ";
+            }
+        }
+
+        TextView tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
+        if (tvTotalPrice != null) {
+            tvTotalPrice.setText(priceStr);
+        }
+
+        final String finalPriceStr = priceStr;
         View btnContinue = view.findViewById(R.id.btnContinue);
-        btnContinue.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.appointmentConfirmFragment));
+        btnContinue.setOnClickListener(v -> {
+            Bundle args = getArguments() != null ? new Bundle(getArguments()) : new Bundle();
+            args.putString("bookingPrice", finalPriceStr);
+            Navigation.findNavController(v).navigate(R.id.appointmentConfirmFragment, args);
+        });
 
         RecyclerView rvDates = view.findViewById(R.id.rvDates);
         RecyclerView rvTimes = view.findViewById(R.id.rvTimes);

@@ -1,6 +1,6 @@
 package com.example.healthbook.data.models;
 
-public class Appointment {
+public class Appointment implements java.io.Serializable {
     private String id;
     private Doctor doctor;
     private String date;

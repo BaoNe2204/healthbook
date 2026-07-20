@@ -23,75 +23,35 @@ public class ApiRepository {
     }
 
     public void getDoctors(Callback<List<Doctor>> callback) {
-        RetrofitClient.getInstance().getApiService().getDoctors().enqueue(new retrofit2.Callback<List<Doctor>>() {
-            @Override
-            public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
-                } else {
-                    callback.onFailure(new Exception("API Error"));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Doctor>> call, Throwable t) {
-                callback.onFailure(new Exception(t));
-            }
-        });
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getDoctors());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getSpecialties(Callback<List<Specialty>> callback) {
-        RetrofitClient.getInstance().getApiService().getSpecialties().enqueue(new retrofit2.Callback<List<Specialty>>() {
-            @Override
-            public void onResponse(Call<List<Specialty>> call, Response<List<Specialty>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
-                } else {
-                    callback.onFailure(new Exception("API Error"));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Specialty>> call, Throwable t) {
-                callback.onFailure(new Exception(t));
-            }
-        });
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getSpecialties());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getHospitals(Callback<List<Hospital>> callback) {
-        RetrofitClient.getInstance().getApiService().getHospitals().enqueue(new retrofit2.Callback<List<Hospital>>() {
-            @Override
-            public void onResponse(Call<List<Hospital>> call, Response<List<Hospital>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
-                } else {
-                    callback.onFailure(new Exception("API Error"));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Hospital>> call, Throwable t) {
-                callback.onFailure(new Exception(t));
-            }
-        });
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getHospitals());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getAppointments(Callback<List<Appointment>> callback) {
-        RetrofitClient.getInstance().getApiService().getAppointments().enqueue(new retrofit2.Callback<List<Appointment>>() {
-            @Override
-            public void onResponse(Call<List<Appointment>> call, Response<List<Appointment>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
-                } else {
-                    callback.onFailure(new Exception("API Error"));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Appointment>> call, Throwable t) {
-                callback.onFailure(new Exception(t));
-            }
-        });
+        try {
+            callback.onSuccess(com.example.healthbook.data.MockData.getAppointments());
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     public void getUserProfile(Callback<com.example.healthbook.data.models.UserProfile> callback) {
