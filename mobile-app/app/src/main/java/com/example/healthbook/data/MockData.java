@@ -41,9 +41,9 @@ public class MockData {
 
     public static List<Hospital> getHospitals() {
         List<Hospital> list = new ArrayList<>();
-        list.add(new Hospital("1", "Bệnh viện Bạch Mai", "78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội"));
-        list.add(new Hospital("2", "Bệnh viện Việt Đức", "40 Tràng Thi, Hàng Bông, Hoàn Kiếm, Hà Nội"));
-        list.add(new Hospital("3", "Bệnh viện Nhi Trung Ương", "18/879 La Thành, Láng Thượng, Đống Đa, Hà Nội"));
+        list.add(new Hospital("1", "Bệnh viện Bạch Mai", "78 Giải Phóng, Phương Đình, Đống Đa, Hà Nội", com.example.healthbook.R.drawable.hospital_1));
+        list.add(new Hospital("2", "Bệnh viện Việt Đức", "40 Tràng Thi, Hàng Bông, Hoàn Kiếm, Hà Nội", com.example.healthbook.R.drawable.hospital_2));
+        list.add(new Hospital("3", "Bệnh viện Nhi Trung Ương", "18/879 La Thành, Láng Thượng, Đống Đa, Hà Nội", com.example.healthbook.R.drawable.hospital_3));
         return list;
     }
 

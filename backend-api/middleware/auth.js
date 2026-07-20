@@ -1,5 +1,5 @@
 const { getAuth } = require('firebase-admin/auth');
-const { sql, poolPromise } = require('../db-config');
+const { db } = require('../firebase-config');
 
 async function verifyToken(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -20,16 +20,15 @@ async function verifyToken(req, res, next) {
 function requireRole(role) {
     return async (req, res, next) => {
         try {
-            const pool = await poolPromise;
-            const result = await pool.request()
-                .input('id', sql.NVarChar, req.user.uid)
-                .query('SELECT * FROM Users WHERE id = @id');
+            const uid = req.user.uid;
+            const docRef = db.collection('Users').doc(uid);
+            const doc = await docRef.get();
             
-            if (result.recordset.length === 0) {
+            if (!doc.exists) {
                 return res.status(403).json({ error: 'User record not found in database' });
             }
             
-            const userData = result.recordset[0];
+            const userData = doc.data();
             const userRole = userData.role ? userData.role.toUpperCase() : 'PATIENT';
             const requiredRole = role.toUpperCase();
             

@@ -1,53 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const { sql, poolPromise } = require('../db-config');
 const { verifyToken, requireRole } = require('../middleware/auth');
 
 // Tất cả các API trong file này đều yêu cầu quyền 'doctor'
 router.use(verifyToken, requireRole('doctor'));
 
-// Helper to get Doctor auto-increment ID from Firebase user UID
-async function getDoctorIdFromUid(uid) {
-    const pool = await poolPromise;
-    const result = await pool.request()
-        .input('user_id', sql.NVarChar, uid)
-        .query('SELECT id FROM Doctors WHERE user_id = @user_id');
-    if (result.recordset.length > 0) {
-        return result.recordset[0].id;
-    }
-    return null;
-}
-
 // GET /api/doctor/appointments
 // Lấy danh sách lịch hẹn của bác sĩ này
 router.get('/appointments', async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const doctorId = await getDoctorIdFromUid(req.user.uid);
-        
-        if (!doctorId) {
-            return res.json([]); // Return empty list if this doctor user is not linked in Doctors table
-        }
-
+        const db = req.db;
+        const uid = req.user.uid;
         const date = req.query.date;
-        let queryStr = `
-            SELECT a.*, u.name as patientName, u.phone as patientPhone, u.email as patientEmail 
-            FROM Appointments a
-            LEFT JOIN Users u ON a.patient_id = u.id
-            WHERE a.doctor_id = @doctor_id
-        `;
 
-        const request = pool.request().input('doctor_id', sql.Int, doctorId);
-
+        let query = db.collection('Appointments').where('doctor_id', '==', uid);
         if (date) {
-            queryStr += ' AND a.appointment_date = @date';
-            request.input('date', sql.NVarChar, date);
+            query = query.where('appointment_date', '==', date);
         }
 
-        queryStr += ' ORDER BY a.appointment_date DESC, a.appointment_time DESC';
+        const snapshot = await query.get();
+        const appointments = [];
+        
+        snapshot.forEach(doc => {
+            appointments.push({ id: doc.id, ...doc.data() });
+        });
 
-        const result = await request.query(queryStr);
-        res.json(result.recordset);
+        // Tự sắp xếp trong bộ nhớ
+        appointments.sort((a, b) => {
+            const dateA = new Date(a.appointment_date + ' ' + a.appointment_time);
+            const dateB = new Date(b.appointment_date + ' ' + b.appointment_time);
+            return dateB - dateA;
+        });
+
+        res.json(appointments);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -57,38 +42,28 @@ router.get('/appointments', async (req, res) => {
 // Cập nhật trạng thái lịch hẹn (Chấp nhận / Từ chối / Hoàn thành)
 router.put('/appointments/:id/status', async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const doctorId = await getDoctorIdFromUid(req.user.uid);
-        if (!doctorId) {
-            return res.status(403).json({ error: 'Doctor profile not found' });
-        }
-
+        const db = req.db;
+        const doctorId = req.user.uid;
         const { id } = req.params;
-        const { status } = req.body; // status: 'confirmed', 'cancelled', 'completed' (or 'Đã duyệt', 'Đã hủy', 'Đã qua')
+        const { status } = req.body; 
 
-        // Map English status back to Vietnamese for consistency
         let statusVN = status;
         if (status === 'confirmed') statusVN = 'Đã duyệt';
         else if (status === 'cancelled') statusVN = 'Đã hủy';
         else if (status === 'completed') statusVN = 'Đã qua';
 
-        // Check if appointment exists and is for this doctor
-        const checkResult = await pool.request()
-            .input('id', sql.Int, id)
-            .query('SELECT doctor_id FROM Appointments WHERE id = @id');
+        const docRef = db.collection('Appointments').doc(id);
+        const doc = await docRef.get();
 
-        if (checkResult.recordset.length === 0) {
+        if (!doc.exists) {
             return res.status(404).json({ error: 'Appointment not found' });
         }
 
-        if (checkResult.recordset[0].doctor_id !== doctorId) {
+        if (doc.data().doctor_id !== doctorId) {
             return res.status(403).json({ error: 'Forbidden: Not your appointment' });
         }
 
-        await pool.request()
-            .input('id', sql.Int, id)
-            .input('status', sql.NVarChar, statusVN)
-            .query('UPDATE Appointments SET status = @status WHERE id = @id');
+        await docRef.update({ status: statusVN });
 
         res.json({ message: 'Appointment status updated successfully', status: statusVN });
     } catch (error) {
@@ -100,52 +75,34 @@ router.put('/appointments/:id/status', async (req, res) => {
 // Bác sĩ viết bệnh án và đơn thuốc sau khi khám xong
 router.post('/medical-records', async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const doctorId = await getDoctorIdFromUid(req.user.uid);
-        if (!doctorId) {
-            return res.status(403).json({ error: 'Doctor profile not found' });
-        }
-
+        const db = req.db;
+        const doctorId = req.user.uid;
         const { patientId, appointmentId, diagnosis, prescription, notes } = req.body;
 
         if (!patientId || !diagnosis) {
             return res.status(400).json({ error: 'patientId and diagnosis are required' });
         }
 
-        // Map prescription array to comma/newline separated string if array, otherwise keep as is
         const prescriptionStr = Array.isArray(prescription) ? prescription.join(', ') : (prescription || '');
 
-        const result = await pool.request()
-            .input('doctor_id', sql.Int, doctorId)
-            .input('patient_id', sql.NVarChar, patientId)
-            .input('appointment_id', sql.Int, appointmentId || null)
-            .input('diagnosis', sql.NVarChar, diagnosis)
-            .input('prescription', sql.NVarChar, prescriptionStr)
-            .input('notes', sql.NVarChar, notes || '')
-            .query(`
-                INSERT INTO MedicalRecords (doctor_id, patient_id, appointment_id, diagnosis, prescription, notes)
-                OUTPUT INSERTED.id
-                VALUES (@doctor_id, @patient_id, @appointment_id, @diagnosis, @prescription, @notes)
-            `);
+        const recordData = {
+            doctor_id: doctorId,
+            patient_id: patientId,
+            appointment_id: appointmentId || null,
+            diagnosis: diagnosis,
+            prescription: prescriptionStr,
+            notes: notes || '',
+            created_at: new Date().toISOString()
+        };
 
-        // Cập nhật trạng thái lịch hẹn thành 'Đã qua' (completed)
+        const docRef = await db.collection('MedicalRecords').add(recordData);
+
         if (appointmentId) {
-            await pool.request()
-                .input('id', sql.Int, appointmentId)
-                .query("UPDATE Appointments SET status = N'Đã qua' WHERE id = @id");
+            await db.collection('Appointments').doc(appointmentId).update({ status: 'Đã qua' });
         }
 
-        const recordId = result.recordset[0].id;
-        res.status(201).json({
-            id: recordId,
-            doctorId,
-            patientId,
-            appointmentId: appointmentId || null,
-            diagnosis,
-            prescription,
-            notes,
-            createdAt: new Date().toISOString()
-        });
+        recordData.id = docRef.id;
+        res.status(201).json(recordData);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -155,13 +112,9 @@ router.post('/medical-records', async (req, res) => {
 // Đặt lịch rảnh cho bác sĩ
 router.post('/schedule', async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const doctorId = await getDoctorIdFromUid(req.user.uid);
-        if (!doctorId) {
-            return res.status(403).json({ error: 'Doctor profile not found' });
-        }
-
-        const { date, timeSlots } = req.body; // timeSlots: ['08:00', '09:00', '10:00']
+        const db = req.db;
+        const doctorId = req.user.uid;
+        const { date, timeSlots } = req.body; 
 
         if (!date || !timeSlots || !Array.isArray(timeSlots)) {
             return res.status(400).json({ error: 'date and timeSlots array are required' });
@@ -170,24 +123,26 @@ router.post('/schedule', async (req, res) => {
         const timeSlotsStr = timeSlots.join(',');
 
         // Check if schedule for date already exists
-        const checkResult = await pool.request()
-            .input('doctor_id', sql.Int, doctorId)
-            .input('date', sql.NVarChar, date)
-            .query('SELECT id FROM Schedules WHERE doctor_id = @doctor_id AND available_date = @date');
+        const snapshot = await db.collection('Schedules')
+            .where('doctor_id', '==', doctorId)
+            .where('available_date', '==', date)
+            .get();
 
-        if (checkResult.recordset.length > 0) {
+        if (!snapshot.empty) {
             // Update
-            await pool.request()
-                .input('id', sql.Int, checkResult.recordset[0].id)
-                .input('slots', sql.NVarChar, timeSlotsStr)
-                .query('UPDATE Schedules SET time_slots = @slots, updated_at = GETDATE() WHERE id = @id');
+            const docId = snapshot.docs[0].id;
+            await db.collection('Schedules').doc(docId).update({
+                time_slots: timeSlotsStr,
+                updated_at: new Date().toISOString()
+            });
         } else {
             // Insert
-            await pool.request()
-                .input('doctor_id', sql.Int, doctorId)
-                .input('date', sql.NVarChar, date)
-                .input('slots', sql.NVarChar, timeSlotsStr)
-                .query('INSERT INTO Schedules (doctor_id, available_date, time_slots) VALUES (@doctor_id, @date, @slots)');
+            await db.collection('Schedules').add({
+                doctor_id: doctorId,
+                available_date: date,
+                time_slots: timeSlotsStr,
+                created_at: new Date().toISOString()
+            });
         }
 
         res.json({ message: 'Schedule updated successfully' });

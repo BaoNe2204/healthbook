@@ -29,6 +29,9 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         Hospital hospital = hospitals.get(position);
         holder.tvName.setText(hospital.getName());
         holder.tvAddress.setText(hospital.getAddress());
+        if (hospital.getImageResId() != 0) {
+            holder.ivImage.setImageResource(hospital.getImageResId());
+        }
 
         holder.itemView.setOnClickListener(v -> {
             android.os.Bundle args = new android.os.Bundle();
@@ -44,11 +47,13 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvAddress;
+        android.widget.ImageView ivImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvHospitalName);
             tvAddress = itemView.findViewById(R.id.tvHospitalAddress);
+            ivImage = itemView.findViewById(R.id.ivHospitalImage);
         }
     }
 }

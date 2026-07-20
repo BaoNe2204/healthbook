@@ -1,23 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { sql, poolPromise } = require('../db-config');
 const { verifyToken } = require('../middleware/auth');
 
+// Lấy tham chiếu tới Firestore từ req.db (đã được cấu hình ở server.js)
+
 // GET /api/users/profile
-// Lấy thông tin chi tiết user (bao gồm role)
+// Lấy thông tin chi tiết user
 router.get('/profile', verifyToken, async (req, res) => {
     try {
-        const pool = await poolPromise;
+        const db = req.db;
         const uid = req.user.uid;
         
-        const result = await pool.request()
-            .input('id', sql.NVarChar, uid)
-            .query('SELECT id AS uid, email, name AS displayName, phone, dob, gender, address, role, created_at AS createdAt FROM Users WHERE id = @id');
-            
-        if (result.recordset.length === 0) {
+        const docRef = db.collection('Users').doc(uid);
+        const doc = await docRef.get();
+        
+        if (!doc.exists) {
             return res.status(404).json({ error: 'User not found in database' });
         }
-        res.json(result.recordset[0]);
+        const data = doc.data();
+        data.uid = uid; // Ensure uid is included
+        res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -27,33 +29,29 @@ router.get('/profile', verifyToken, async (req, res) => {
 // Cập nhật thông tin cá nhân
 router.put('/profile', verifyToken, async (req, res) => {
     try {
-        const pool = await poolPromise;
+        const db = req.db;
         const uid = req.user.uid;
         const { displayName, phone, dob, gender, address } = req.body;
         
         console.log(`[PUT /profile] User UID: ${uid}`);
         console.log(`[PUT /profile] Data received:`, req.body);
         
-        const result = await pool.request()
-            .input('id', sql.NVarChar, uid)
-            .input('name', sql.NVarChar, displayName)
-            .input('phone', sql.NVarChar, phone)
-            .input('dob', sql.NVarChar, dob)
-            .input('gender', sql.NVarChar, gender)
-            .input('address', sql.NVarChar, address)
-            .query(`
-                UPDATE Users 
-                SET name = @name, phone = @phone, dob = @dob, gender = @gender, address = @address
-                WHERE id = @id
-            `);
-            
-        console.log(`[PUT /profile] Rows affected:`, result.rowsAffected);
+        const docRef = db.collection('Users').doc(uid);
+        const doc = await docRef.get();
         
-        if (result.rowsAffected[0] === 0) {
-            return res.status(404).json({ error: 'User not found in database to update (UID mismatch)' });
+        if (!doc.exists) {
+             return res.status(404).json({ error: 'User not found in database to update (UID mismatch)' });
         }
+        
+        await docRef.update({
+            displayName: displayName || doc.data().displayName,
+            phone: phone || doc.data().phone,
+            dob: dob || doc.data().dob,
+            gender: gender || doc.data().gender,
+            address: address || doc.data().address
+        });
             
-        res.json({ message: 'Profile updated successfully', rowsAffected: result.rowsAffected });
+        res.json({ message: 'Profile updated successfully' });
     } catch (error) {
         console.error(`[PUT /profile] Error:`, error);
         res.status(500).json({ error: error.message });
@@ -64,58 +62,46 @@ router.put('/profile', verifyToken, async (req, res) => {
 // Gọi API này ngay sau khi App vừa đăng ký tài khoản Firebase Auth thành công
 router.post('/register', verifyToken, async (req, res) => {
     try {
-        const pool = await poolPromise;
+        const db = req.db;
         const uid = req.user.uid;
         const email = req.user.email;
         const { displayName, isDoctorRegistration } = req.body; 
         
-        // Mặc định role là PATIENT. Nếu là bác sĩ, set DOCTOR (trạng thái chờ duyệt có thể thêm cột sau nếu cần)
         const assignedRole = isDoctorRegistration ? 'DOCTOR' : 'PATIENT';
         const name = displayName || email.split('@')[0];
 
-        // Kiểm tra xem user đã tồn tại chưa
-        const checkResult = await pool.request()
-            .input('id', sql.NVarChar, uid)
-            .query('SELECT id FROM Users WHERE id = @id');
-            
-        if (checkResult.recordset.length > 0) {
+        const docRef = db.collection('Users').doc(uid);
+        const doc = await docRef.get();
+        
+        if (doc.exists) {
             return res.status(400).json({ error: 'User already registered in database' });
         }
 
-        // Thêm vào SQL Server
-        await pool.request()
-            .input('id', sql.NVarChar, uid)
-            .input('email', sql.NVarChar, email)
-            .input('name', sql.NVarChar, name)
-            .input('role', sql.NVarChar, assignedRole)
-            .query(`
-                INSERT INTO Users (id, email, name, role)
-                VALUES (@id, @email, @name, @role)
-            `);
-
-        // Nếu đăng ký là bác sĩ, thêm vào bảng Doctors để liên kết
-        if (isDoctorRegistration) {
-            try {
-                await pool.request()
-                    .input('name', sql.NVarChar, name)
-                    .input('user_id', sql.NVarChar, uid)
-                    .query(`
-                        INSERT INTO Doctors (name, user_id, rating, reviewCount, imageResId)
-                        VALUES (@name, @user_id, 5.0, 0, 0)
-                    `);
-            } catch (err) {
-                console.error("Error creating Doctor profile link:", err);
-            }
-        }
-
         const userData = {
-            uid: uid,
             email: email,
             displayName: name,
             role: assignedRole,
             createdAt: new Date().toISOString()
         };
 
+        await docRef.set(userData);
+
+        if (isDoctorRegistration) {
+            try {
+                // Thêm một bản ghi vào collection Doctors
+                await db.collection('Doctors').add({
+                    name: name,
+                    user_id: uid,
+                    rating: 5.0,
+                    reviewCount: 0,
+                    imageResId: 0
+                });
+            } catch (err) {
+                console.error("Error creating Doctor profile link:", err);
+            }
+        }
+
+        userData.uid = uid;
         res.status(201).json(userData);
     } catch (error) {
         res.status(500).json({ error: error.message });

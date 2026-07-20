@@ -134,22 +134,22 @@ public class DoctorSearchFragment extends Fragment {
             case 0:
                 tvSuggestedTitle.setText("Bác sĩ gợi ý cho bạn");
                 rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-                if (currentDoctorAdapter != null) rvList.setAdapter(currentDoctorAdapter);
+                rvList.setAdapter(currentDoctorAdapter);
                 break;
             case 1:
                 tvSuggestedTitle.setText("Chuyên khoa phổ biến");
                 rvList.setLayoutManager(new GridLayoutManager(getContext(), 4));
-                if (currentSpecialtyAdapter != null) rvList.setAdapter(currentSpecialtyAdapter);
+                rvList.setAdapter(currentSpecialtyAdapter);
                 break;
             case 2:
                 tvSuggestedTitle.setText("Phòng khám nổi bật");
                 rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-                if (currentClinicAdapter != null) rvList.setAdapter(currentClinicAdapter);
+                rvList.setAdapter(currentClinicAdapter);
                 break;
             case 3:
                 tvSuggestedTitle.setText("Bệnh viện nổi bật");
                 rvList.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                if (currentHospitalAdapter != null) rvList.setAdapter(currentHospitalAdapter);
+                rvList.setAdapter(currentHospitalAdapter);
                 break;
         }
     }
