@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.Gravity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
