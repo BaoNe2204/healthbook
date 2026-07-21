@@ -76,6 +76,23 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Danh sách bệnh viện hiện có -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh sách bệnh viện hiện có"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAdminHospitals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:nestedScrollingEnabled="false" />
+
         <!-- Card: Add Specialty -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -132,6 +149,23 @@
                     android:text="THÊM CHUYÊN KHOA" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Danh sách chuyên khoa hiện có -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh sách chuyên khoa hiện có"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAdminSpecialties"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 </ScrollView>

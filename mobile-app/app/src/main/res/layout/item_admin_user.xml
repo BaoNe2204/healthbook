@@ -44,13 +44,16 @@
                 android:id="@+id/tvUserRole"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PATIENT"
+                android:text="PATIENT (Nhấp để đổi)"
                 android:textColor="@color/primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:background="@color/secondary"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginTop="6dp" />
         </LinearLayout>
 

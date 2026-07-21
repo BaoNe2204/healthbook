@@ -29,10 +29,61 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nội dung Người thân sẽ được thiết kế ở đây."
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Họ và tên người thân">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRelativeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Văn B" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Mối quan hệ (VD: Bố / Mẹ / Con / Vợ)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRelativeRelation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Con trai" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Số điện thoại liên hệ">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRelativePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:text="0912345678" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveRelative"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:text="LƯU HỒ SƠ NGƯỜI THÂN" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

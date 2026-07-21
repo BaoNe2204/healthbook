@@ -10,6 +10,7 @@ public class Doctor implements Serializable {
     private double rating;
     private int reviewCount;
     private int imageResId;
+    private String imageUrl;
     
     private int experience;
     private int price;
@@ -38,6 +39,7 @@ public class Doctor implements Serializable {
     public double getRating() { return rating; }
     public int getReviewCount() { return reviewCount; }
     public int getImageResId() { return imageResId; }
+    public String getImageUrl() { return imageUrl; }
     public int getExperience() { return experience; }
     public int getPrice() { return price; }
     public String getDescription() { return description; }

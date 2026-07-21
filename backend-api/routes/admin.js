@@ -70,6 +70,26 @@ router.put('/users/:uid/ban', async (req, res) => {
     }
 });
 
+// PUT /api/admin/users/:uid/role
+// Thay đổi vai trò người dùng (PATIENT / DOCTOR / ADMIN)
+router.put('/users/:uid/role', async (req, res) => {
+    try {
+        const db = req.db;
+        const { uid } = req.params;
+        const { role } = req.body;
+
+        if (!role) {
+            return res.status(400).json({ error: 'Role is required' });
+        }
+
+        await db.collection('Users').doc(uid).update({ role: role.toUpperCase() });
+
+        res.json({ message: `User role updated to ${role}` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // PUT /api/admin/doctors/:uid/approve
 // Duyệt hồ sơ bác sĩ (từ pending sang active)
 router.put('/doctors/:uid/approve', async (req, res) => {
@@ -115,6 +135,19 @@ router.post('/hospitals', async (req, res) => {
     }
 });
 
+// DELETE /api/admin/hospitals/:id
+// Xóa bệnh viện
+router.delete('/hospitals/:id', async (req, res) => {
+    try {
+        const db = req.db;
+        const { id } = req.params;
+        await db.collection('Hospitals').doc(id).delete();
+        res.json({ message: 'Hospital deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // POST /api/admin/specialties
 // Thêm chuyên khoa mới
 router.post('/specialties', async (req, res) => {
@@ -131,6 +164,19 @@ router.post('/specialties', async (req, res) => {
 
         data.id = docRef.id;
         res.status(201).json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// DELETE /api/admin/specialties/:id
+// Xóa chuyên khoa
+router.delete('/specialties/:id', async (req, res) => {
+    try {
+        const db = req.db;
+        const { id } = req.params;
+        await db.collection('Specialties').doc(id).delete();
+        res.json({ message: 'Specialty deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -8,6 +8,12 @@ public class UserProfile {
     private String dob;
     private String gender;
     private String address;
+    private String insuranceCode;
+    private String hospitalRegister;
+    private String insuranceExpiry;
+    private String relativeName;
+    private String relativeRelation;
+    private String relativePhone;
     private String role;
     private String status;
     private String createdAt;
@@ -82,6 +88,54 @@ public class UserProfile {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getInsuranceCode() {
+        return insuranceCode;
+    }
+
+    public void setInsuranceCode(String insuranceCode) {
+        this.insuranceCode = insuranceCode;
+    }
+
+    public String getHospitalRegister() {
+        return hospitalRegister;
+    }
+
+    public void setHospitalRegister(String hospitalRegister) {
+        this.hospitalRegister = hospitalRegister;
+    }
+
+    public String getInsuranceExpiry() {
+        return insuranceExpiry;
+    }
+
+    public void setInsuranceExpiry(String insuranceExpiry) {
+        this.insuranceExpiry = insuranceExpiry;
+    }
+
+    public String getRelativeName() {
+        return relativeName;
+    }
+
+    public void setRelativeName(String relativeName) {
+        this.relativeName = relativeName;
+    }
+
+    public String getRelativeRelation() {
+        return relativeRelation;
+    }
+
+    public void setRelativeRelation(String relativeRelation) {
+        this.relativeRelation = relativeRelation;
+    }
+
+    public String getRelativePhone() {
+        return relativePhone;
+    }
+
+    public void setRelativePhone(String relativePhone) {
+        this.relativePhone = relativePhone;
     }
 
     public String getCreatedAt() {

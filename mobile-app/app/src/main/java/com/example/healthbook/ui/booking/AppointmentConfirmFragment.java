@@ -49,37 +49,33 @@ public class AppointmentConfirmFragment extends Fragment {
             }
         }
 
-        com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
-        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", android.content.Context.MODE_PRIVATE);
-        String name = prefs.getString("fullName", "");
-        String phone = prefs.getString("phone", "");
-        String dob = prefs.getString("dob", "");
-        String gender = prefs.getString("gender", "");
-        
-        // Override with custom profile if provided
-        if (getArguments() != null) {
-            if (getArguments().getString("patientName") != null) name = getArguments().getString("patientName");
-            if (getArguments().getString("patientPhone") != null) phone = getArguments().getString("patientPhone");
-            if (getArguments().getString("patientDob") != null) dob = getArguments().getString("patientDob");
-            if (getArguments().getString("patientGender") != null) gender = getArguments().getString("patientGender");
-        }
-
         android.widget.TextView tvPatientName = view.findViewById(R.id.tvConfirmPatientName);
-        if (tvPatientName != null) {
-            if (!name.isEmpty()) tvPatientName.setText(name);
-            else if (user != null && user.getDisplayName() != null) tvPatientName.setText(user.getDisplayName());
-        }
-        
         android.widget.TextView tvPatientPhone = view.findViewById(R.id.tvConfirmPatientPhone);
-        if (tvPatientPhone != null) {
-            if (!phone.isEmpty()) tvPatientPhone.setText(phone);
-            else if (user != null && user.getPhoneNumber() != null) tvPatientPhone.setText(user.getPhoneNumber());
-        }
-
         android.widget.TextView tvPatientDobGender = view.findViewById(R.id.tvConfirmPatientDobGender);
-        if (tvPatientDobGender != null && !dob.isEmpty() && !gender.isEmpty()) {
-            tvPatientDobGender.setText(gender + " - " + dob);
-        }
+
+        com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+
+        // Load profile from Firebase API
+        com.example.healthbook.network.RetrofitClient.getInstance().getApiService().getUserProfile().enqueue(new retrofit2.Callback<com.example.healthbook.data.models.UserProfile>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, retrofit2.Response<com.example.healthbook.data.models.UserProfile> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    com.example.healthbook.data.models.UserProfile profile = response.body();
+                    String name = profile.getDisplayName() != null ? profile.getDisplayName() : (user != null ? user.getDisplayName() : "");
+                    String phone = profile.getPhone() != null ? profile.getPhone() : "";
+                    String dob = profile.getDob() != null ? profile.getDob() : "";
+                    String gender = profile.getGender() != null ? profile.getGender() : "";
+
+                    if (tvPatientName != null && !name.isEmpty()) tvPatientName.setText(name);
+                    if (tvPatientPhone != null && !phone.isEmpty()) tvPatientPhone.setText(phone);
+                    if (tvPatientDobGender != null && !dob.isEmpty()) tvPatientDobGender.setText(gender + " - " + dob);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, Throwable t) {
+            }
+        });
 
         return view;
     }

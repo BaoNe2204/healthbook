@@ -26,6 +26,9 @@ public interface ApiService {
     @GET("/api/hospitals")
     Call<List<Hospital>> getHospitals();
 
+    @GET("/api/clinics")
+    Call<List<com.example.healthbook.data.models.Clinic>> getClinics();
+
     @GET("/api/appointments")
     Call<List<Appointment>> getAppointments();
 
@@ -67,9 +70,18 @@ public interface ApiService {
     @retrofit2.http.PUT("/api/admin/users/{uid}/ban")
     Call<Void> banUser(@retrofit2.http.Path("uid") String uid, @Body Map<String, Boolean> body);
 
+    @retrofit2.http.PUT("/api/admin/users/{uid}/role")
+    Call<Void> updateUserRole(@retrofit2.http.Path("uid") String uid, @Body Map<String, String> body);
+
     @POST("/api/admin/hospitals")
     Call<Void> createHospital(@Body Map<String, Object> body);
 
+    @retrofit2.http.DELETE("/api/admin/hospitals/{id}")
+    Call<Void> deleteHospital(@retrofit2.http.Path("id") String id);
+
     @POST("/api/admin/specialties")
     Call<Void> createSpecialty(@Body Map<String, Object> body);
+
+    @retrofit2.http.DELETE("/api/admin/specialties/{id}")
+    Call<Void> deleteSpecialty(@retrofit2.http.Path("id") String id);
 }

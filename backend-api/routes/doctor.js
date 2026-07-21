@@ -13,16 +13,23 @@ router.get('/appointments', async (req, res) => {
         const uid = req.user.uid;
         const date = req.query.date;
 
-        let query = db.collection('Appointments').where('doctor_id', '==', uid);
-        if (date) {
-            query = query.where('appointment_date', '==', date);
+        // Tìm cả theo uid bác sĩ hoặc user_id liên kết trong Doctors
+        let doctorIds = [uid];
+        const doctorDoc = await db.collection('Doctors').where('user_id', '==', uid).get();
+        if (!doctorDoc.empty) {
+            doctorDoc.forEach(doc => doctorIds.push(doc.id));
         }
 
-        const snapshot = await query.get();
+        const snapshot = await db.collection('Appointments').get();
         const appointments = [];
         
         snapshot.forEach(doc => {
-            appointments.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            if (doctorIds.includes(data.doctor_id)) {
+                if (!date || data.appointment_date === date) {
+                    appointments.push({ id: doc.id, ...data });
+                }
+            }
         });
 
         // Tự sắp xếp trong bộ nhớ

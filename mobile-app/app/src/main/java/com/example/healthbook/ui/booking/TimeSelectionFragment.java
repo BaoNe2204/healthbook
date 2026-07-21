@@ -56,9 +56,23 @@ public class TimeSelectionFragment extends Fragment {
         RecyclerView rvDates = view.findViewById(R.id.rvDates);
         RecyclerView rvTimes = view.findViewById(R.id.rvTimes);
 
-        List<String> days = Arrays.asList("Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6");
-        List<String> dates = Arrays.asList("27/05", "28/05", "29/05", "30/05", "31/05");
+        List<String> days = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
         
+        java.text.SimpleDateFormat dayFormat = new java.text.SimpleDateFormat("EEE", new java.util.Locale("vi", "VN"));
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM", java.util.Locale.getDefault());
+        java.text.SimpleDateFormat fullDateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+        
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        final List<String> fullDates = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            days.add(i == 0 ? "Hôm nay" : dayFormat.format(calendar.getTime()));
+            dates.add(dateFormat.format(calendar.getTime()));
+            fullDates.add(fullDateFormat.format(calendar.getTime()));
+            calendar.add(java.util.Calendar.DAY_OF_MONTH, 1);
+        }
+
         final List<String> availableTimes = new ArrayList<>();
         final TimeAdapter timeAdapter = new TimeAdapter(availableTimes);
         rvTimes.setLayoutManager(new GridLayoutManager(getContext(), 4));
@@ -69,22 +83,29 @@ public class TimeSelectionFragment extends Fragment {
 
         DateAdapter dateAdapter = new DateAdapter(days, dates, new DateAdapter.OnDateSelectedListener() {
             @Override
-            public void onDateSelected(String date) {
-                loadSlots(doctorId, date + "/2026", availableTimes, timeAdapter);
+            public void onDateSelected(String date, int position) {
+                if (position >= 0 && position < fullDates.size()) {
+                    loadSlots(doctorId, fullDates.get(position), availableTimes, timeAdapter);
+                }
             }
         });
         rvDates.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvDates.setAdapter(dateAdapter);
 
-        // Load initially
-        loadSlots(doctorId, "27/05/2026", availableTimes, timeAdapter);
+        // Load initially today's schedule
+        if (!fullDates.isEmpty()) {
+            loadSlots(doctorId, fullDates.get(0), availableTimes, timeAdapter);
+        }
 
         btnContinue.setOnClickListener(v -> {
             Bundle args = new Bundle();
             if (getArguments() != null) {
                 args.putAll(getArguments());
             }
-            args.putString("bookingDate", dateAdapter.getSelectedDate() + "/2026");
+            int pos = dateAdapter.getSelectedPosition();
+            String selectedDateStr = (pos >= 0 && pos < fullDates.size()) ? fullDates.get(pos) : fullDateFormat.format(new java.util.Date());
+            
+            args.putString("bookingDate", selectedDateStr);
             args.putString("bookingTime", timeAdapter.getSelectedTime());
             
             if (doctor != null) {

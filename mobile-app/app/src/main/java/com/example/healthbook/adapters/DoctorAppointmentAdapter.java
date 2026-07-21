@@ -169,12 +169,8 @@ public class DoctorAppointmentAdapter extends RecyclerView.Adapter<DoctorAppoint
             }
 
             Map<String, Object> body = new HashMap<>();
-            body.put("patientId", app.getId());
-            try {
-                body.put("appointmentId", Integer.parseInt(app.getId()));
-            } catch (Exception e) {
-                body.put("appointmentId", 1);
-            }
+            body.put("patientId", app.getPatient_id() != null ? app.getPatient_id() : app.getId());
+            body.put("appointmentId", app.getId());
             body.put("diagnosis", diagnosis);
             body.put("prescription", prescription);
             body.put("notes", notes);

@@ -43,13 +43,20 @@ router.put('/profile', verifyToken, async (req, res) => {
              return res.status(404).json({ error: 'User not found in database to update (UID mismatch)' });
         }
         
-        await docRef.update({
-            displayName: displayName || doc.data().displayName,
-            phone: phone || doc.data().phone,
-            dob: dob || doc.data().dob,
-            gender: gender || doc.data().gender,
-            address: address || doc.data().address
-        });
+        const updateData = {};
+        if (req.body.displayName !== undefined) updateData.displayName = req.body.displayName;
+        if (req.body.phone !== undefined) updateData.phone = req.body.phone;
+        if (req.body.dob !== undefined) updateData.dob = req.body.dob;
+        if (req.body.gender !== undefined) updateData.gender = req.body.gender;
+        if (req.body.address !== undefined) updateData.address = req.body.address;
+        if (req.body.insuranceCode !== undefined) updateData.insuranceCode = req.body.insuranceCode;
+        if (req.body.hospitalRegister !== undefined) updateData.hospitalRegister = req.body.hospitalRegister;
+        if (req.body.insuranceExpiry !== undefined) updateData.insuranceExpiry = req.body.insuranceExpiry;
+        if (req.body.relativeName !== undefined) updateData.relativeName = req.body.relativeName;
+        if (req.body.relativeRelation !== undefined) updateData.relativeRelation = req.body.relativeRelation;
+        if (req.body.relativePhone !== undefined) updateData.relativePhone = req.body.relativePhone;
+
+        await docRef.set(updateData, { merge: true });
             
         res.json({ message: 'Profile updated successfully' });
     } catch (error) {

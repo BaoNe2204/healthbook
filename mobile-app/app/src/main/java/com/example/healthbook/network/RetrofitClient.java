@@ -16,8 +16,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    // Dùng IP 10.0.2.2 nếu bạn đang chạy trên Máy Ảo (Emulator) để không bị chặn Firewall
-    private static final String BASE_URL = "http://10.0.2.2:3000/";
+    // Dùng IP 192.168.1.2 thay vì 10.0.2.2 để có thể chạy được trên cả Máy Ảo và Máy Thật (cùng WiFi)
+    private static final String BASE_URL = "http://192.168.1.2:3000/";
     private static RetrofitClient instance;
     private Retrofit retrofit;
 

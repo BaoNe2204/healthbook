@@ -29,8 +29,14 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         Hospital hospital = hospitals.get(position);
         holder.tvName.setText(hospital.getName());
         holder.tvAddress.setText(hospital.getAddress());
-        if (hospital.getImageResId() != 0) {
-            holder.ivImage.setImageResource(hospital.getImageResId());
+
+        if (hospital.getImageUrl() != null && !hospital.getImageUrl().isEmpty()) {
+            holder.ivImage.setPadding(0, 0, 0, 0);
+            holder.ivImage.clearColorFilter();
+            com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                    .load(hospital.getImageUrl())
+                    .centerCrop()
+                    .into(holder.ivImage);
         }
 
         holder.itemView.setOnClickListener(v -> {

@@ -40,6 +40,14 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         holder.tvRating.setText(String.valueOf(doctor.getRating()));
         holder.tvReviews.setText(doctor.getReviewCount() + "+ lượt khám");
 
+        if (doctor.getImageUrl() != null && !doctor.getImageUrl().isEmpty()) {
+            com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                    .load(doctor.getImageUrl())
+                    .circleCrop()
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .into(holder.ivAvatar);
+        }
+
         holder.btnBook.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onBookClick(doctor);
@@ -60,6 +68,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvSpecialty, tvHospital, tvRating, tvReviews;
+        ImageView ivAvatar;
         View btnBook;
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,6 +78,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
             tvHospital = itemView.findViewById(R.id.tvDoctorHospital);
             tvRating = itemView.findViewById(R.id.tvDoctorRating);
             tvReviews = itemView.findViewById(R.id.tvDoctorReviews);
+            ivAvatar = itemView.findViewById(R.id.ivDoctorAvatar);
             btnBook = itemView.findViewById(R.id.btnBookDoctor);
         }
     }

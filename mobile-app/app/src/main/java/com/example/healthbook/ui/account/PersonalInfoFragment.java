@@ -36,30 +36,10 @@ public class PersonalInfoFragment extends Fragment {
         AutoCompleteTextView etGender = view.findViewById(R.id.etGender);
         TextInputEditText etAddress = view.findViewById(R.id.etAddress);
 
-        // Load current user data if available
+        // Load current user data from Firebase Cloud
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", android.content.Context.MODE_PRIVATE);
-        
-        String savedName = prefs.getString("fullName", "");
-        String savedPhone = prefs.getString("phone", "");
-        String savedDob = prefs.getString("dob", "");
-        String savedGender = prefs.getString("gender", "");
-
-        if (!savedName.isEmpty()) {
-            etFullName.setText(savedName);
-        } else if (user != null && user.getDisplayName() != null) {
-            etFullName.setText(user.getDisplayName());
-        }
-
-        if (!savedPhone.isEmpty()) {
-            etPhone.setText(savedPhone);
-        } else if (user != null && user.getPhoneNumber() != null) {
-            etPhone.setText(user.getPhoneNumber());
-        }
-
+        if (user != null && user.getDisplayName() != null) etFullName.setText(user.getDisplayName());
         if (user != null && user.getEmail() != null) etEmail.setText(user.getEmail());
-        if (!savedDob.isEmpty()) etDob.setText(savedDob);
-        if (!savedGender.isEmpty()) etGender.setText(savedGender);
 
         // Fetch from API to get the latest data
         com.example.healthbook.network.RetrofitClient.getInstance().getApiService().getUserProfile().enqueue(new retrofit2.Callback<com.example.healthbook.data.models.UserProfile>() {
@@ -73,20 +53,11 @@ public class PersonalInfoFragment extends Fragment {
                     if (profile.getDob() != null) etDob.setText(profile.getDob());
                     if (profile.getGender() != null) etGender.setText(profile.getGender());
                     if (profile.getAddress() != null) etAddress.setText(profile.getAddress());
-                    
-                    // Update prefs
-                    prefs.edit()
-                        .putString("fullName", profile.getDisplayName() != null ? profile.getDisplayName() : "")
-                        .putString("phone", profile.getPhone() != null ? profile.getPhone() : "")
-                        .putString("dob", profile.getDob() != null ? profile.getDob() : "")
-                        .putString("gender", profile.getGender() != null ? profile.getGender() : "")
-                        .apply();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, Throwable t) {
-                // Ignore failure, we still have SharedPreferences as fallback
             }
         });
 
@@ -134,16 +105,8 @@ public class PersonalInfoFragment extends Fragment {
                     @Override
                     public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
                         if (response.isSuccessful()) {
-                            // Update local prefs on success
-                            prefs.edit()
-                                .putString("fullName", name)
-                                .putString("phone", phone)
-                                .putString("dob", dob)
-                                .putString("gender", gender)
-                                .apply();
-
                             if (getContext() != null) {
-                                Toast.makeText(getContext(), "Lưu thông tin lên máy chủ thành công!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Lưu thông tin lên Firebase thành công!", Toast.LENGTH_SHORT).show();
                             }
                             if (getActivity() != null) {
                                 getActivity().onBackPressed();

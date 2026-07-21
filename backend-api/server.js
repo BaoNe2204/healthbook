@@ -69,6 +69,20 @@ app.get('/api/hospitals', async (req, res) => {
     }
 });
 
+// GET Clinics
+app.get('/api/clinics', async (req, res) => {
+    try {
+        const snapshot = await db.collection('Clinics').get();
+        const clinics = [];
+        snapshot.forEach(doc => {
+            clinics.push({ id: doc.id, ...doc.data() });
+        });
+        res.json(clinics);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // GET Appointments (Only for the logged in user)
 app.get('/api/appointments', verifyToken, async (req, res) => {
     try {
@@ -176,7 +190,7 @@ app.get('/api/doctors/:id/schedule', async (req, res) => {
 
 const http = require('http');
 const server = http.createServer(app);
-server.listen(PORT, '127.0.0.1', () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Firebase Server is running on port ${PORT}`);
     console.log(`Test URL: http://localhost:${PORT}/api/health`);
 });

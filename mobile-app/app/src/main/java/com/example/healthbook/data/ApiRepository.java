@@ -113,11 +113,20 @@ public class ApiRepository {
     }
 
     public void getClinics(Callback<List<com.example.healthbook.data.models.Clinic>> callback) {
-        // Since backend might not have this yet, return from MockData
-        try {
-            callback.onSuccess(com.example.healthbook.data.MockData.getClinics());
-        } catch (Exception e) {
-            callback.onFailure(e);
-        }
+        RetrofitClient.getInstance().getApiService().getClinics().enqueue(new retrofit2.Callback<List<com.example.healthbook.data.models.Clinic>>() {
+            @Override
+            public void onResponse(Call<List<com.example.healthbook.data.models.Clinic>> call, Response<List<com.example.healthbook.data.models.Clinic>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure(new Exception("API Error fetching clinics"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<com.example.healthbook.data.models.Clinic>> call, Throwable t) {
+                callback.onFailure(new Exception(t));
+            }
+        });
     }
 }

@@ -45,7 +45,39 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
 
         holder.tvName.setText(user.getDisplayName() != null ? user.getDisplayName() : "Ẩn danh");
         holder.tvEmail.setText(user.getEmail());
-        holder.tvRole.setText(user.getRole() != null ? user.getRole().toUpperCase() : "PATIENT");
+        String currentRole = user.getRole() != null ? user.getRole().toUpperCase() : "PATIENT";
+        holder.tvRole.setText("Vai trò: " + currentRole + " ✏️");
+
+        holder.tvRole.setOnClickListener(v -> {
+            String[] roles = {"PATIENT", "DOCTOR", "ADMIN"};
+            new androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setTitle("Chọn vai trò mới cho " + (user.getDisplayName() != null ? user.getDisplayName() : user.getEmail()))
+                    .setItems(roles, (dialog, which) -> {
+                        String selectedRole = roles[which];
+                        Map<String, String> body = new HashMap<>();
+                        body.put("role", selectedRole);
+
+                        RetrofitClient.getInstance().getApiService().updateUserRole(user.getUid(), body).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    user.setRole(selectedRole);
+                                    holder.tvRole.setText("Vai trò: " + selectedRole + " ✏️");
+                                    Toast.makeText(context, "Đã cập nhật vai trò thành " + selectedRole, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "Lỗi cập nhật vai trò: " + response.code(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(context, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
 
         // Status "banned"
         boolean isBanned = "banned".equalsIgnoreCase(user.getStatus());
@@ -69,7 +101,6 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
                         // revert checked state
                         holder.switchBan.setOnCheckedChangeListener(null);
                         holder.switchBan.setChecked(!isChecked);
-                        holder.switchBan.setOnCheckedChangeListener((button, checked) -> holder.switchBan.setChecked(checked));
                     }
                 }
 
@@ -79,7 +110,6 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
                     // revert checked state
                     holder.switchBan.setOnCheckedChangeListener(null);
                     holder.switchBan.setChecked(!isChecked);
-                    holder.switchBan.setOnCheckedChangeListener((button, checked) -> holder.switchBan.setChecked(checked));
                 }
             });
         });

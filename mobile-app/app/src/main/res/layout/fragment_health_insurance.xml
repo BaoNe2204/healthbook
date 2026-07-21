@@ -29,10 +29,60 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nội dung Bảo hiểm y tế sẽ được thiết kế ở đây."
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mã số thẻ BHYT (15 ký tự)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etInsuranceCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="DN4010123456789" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Nơi đăng ký KCB ban đầu">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etHospitalRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bệnh viện Bạch Mai" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Thời hạn giá trị sử dụng đến ngày">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etExpiryDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="31/12/2026" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveInsurance"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:text="LƯU THÔNG TIN THẺ BHYT" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
