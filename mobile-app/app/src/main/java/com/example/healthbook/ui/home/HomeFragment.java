@@ -34,6 +34,21 @@ public class HomeFragment extends Fragment {
             tvUserName.setText(user.getDisplayName());
         }
 
+        // Fetch latest profile from server to update display name instantly
+        com.example.healthbook.network.RetrofitClient.getInstance().getApiService().getUserProfile().enqueue(new retrofit2.Callback<com.example.healthbook.data.models.UserProfile>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, retrofit2.Response<com.example.healthbook.data.models.UserProfile> response) {
+                if (getContext() != null && response.isSuccessful() && response.body() != null) {
+                    if (response.body().getDisplayName() != null && !response.body().getDisplayName().isEmpty()) {
+                        tvUserName.setText(response.body().getDisplayName());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, Throwable t) {
+            }
+        });
+
         RecyclerView rvSpecialties = view.findViewById(R.id.rvSpecialties);
         rvSpecialties.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         ApiRepository repo = new ApiRepository();
@@ -102,6 +117,25 @@ public class HomeFragment extends Fragment {
             args.putInt("tabIndex", 3);
             Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
         });
+
+        View btnHealthRecords = view.findViewById(R.id.btnHealthRecords);
+        if (btnHealthRecords != null) {
+            btnHealthRecords.setOnClickListener(v -> {
+                com.google.android.material.bottomnavigation.BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+                if (navView != null) {
+                    navView.setSelectedItemId(R.id.navigation_profile);
+                } else {
+                    Navigation.findNavController(v).navigate(R.id.navigation_profile);
+                }
+            });
+        }
+
+        View btnVaccination = view.findViewById(R.id.btnVaccination);
+        if (btnVaccination != null) {
+            btnVaccination.setOnClickListener(v -> {
+                Navigation.findNavController(v).navigate(R.id.vaccinationFragment);
+            });
+        }
 
         return view;
     }

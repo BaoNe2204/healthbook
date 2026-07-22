@@ -12,13 +12,79 @@ import com.example.healthbook.R;
 import android.app.DatePickerDialog;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import android.widget.Toast;
 import java.util.Calendar;
+import android.net.Uri;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import com.bumptech.glide.Glide;
+import java.util.Map;
 
 public class PersonalInfoFragment extends Fragment {
+    private ImageView ivAvatar;
+
+    private final ActivityResultLauncher<String> pickImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null) {
+                    uploadAvatar(uri);
+                }
+            }
+    );
+
+    private void uploadAvatar(Uri uri) {
+        try {
+            if (getContext() == null) return;
+            InputStream is = getContext().getContentResolver().openInputStream(uri);
+            File tempFile = new File(getContext().getCacheDir(), "avatar.jpg");
+            FileOutputStream fos = new FileOutputStream(tempFile);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = is.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.close();
+            is.close();
+
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), tempFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", tempFile.getName(), requestFile);
+
+            Toast.makeText(getContext(), "Đang tải ảnh lên...", Toast.LENGTH_SHORT).show();
+
+            com.example.healthbook.network.RetrofitClient.getInstance().getApiService().uploadAvatar(body).enqueue(new retrofit2.Callback<Map<String, String>>() {
+                @Override
+                public void onResponse(retrofit2.Call<Map<String, String>> call, retrofit2.Response<Map<String, String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String url = response.body().get("avatarUrl");
+                        if (url != null && getContext() != null) {
+                            Glide.with(getContext()).load(url).into(ivAvatar);
+                            Toast.makeText(getContext(), "Cập nhật ảnh thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        if (getContext() != null) Toast.makeText(getContext(), "Lỗi tải ảnh", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(retrofit2.Call<Map<String, String>> call, Throwable t) {
+                    if (getContext() != null) Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (getContext() != null) Toast.makeText(getContext(), "Lỗi đọc file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,6 +92,12 @@ public class PersonalInfoFragment extends Fragment {
         View btnBack = view.findViewById(R.id.btnBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
+        }
+
+        ivAvatar = view.findViewById(R.id.ivAvatar);
+        View btnEditAvatar = view.findViewById(R.id.btnEditAvatar);
+        if (btnEditAvatar != null) {
+            btnEditAvatar.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
         }
 
         // Initialize views
@@ -53,6 +125,11 @@ public class PersonalInfoFragment extends Fragment {
                     if (profile.getDob() != null) etDob.setText(profile.getDob());
                     if (profile.getGender() != null) etGender.setText(profile.getGender());
                     if (profile.getAddress() != null) etAddress.setText(profile.getAddress());
+                    if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+                        if (getContext() != null) {
+                            Glide.with(getContext()).load(profile.getAvatarUrl()).into(ivAvatar);
+                        }
+                    }
                 }
             }
 

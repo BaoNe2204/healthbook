@@ -81,6 +81,9 @@ public class DoctorAppointmentAdapter extends RecyclerView.Adapter<DoctorAppoint
 
         // Click handler for examining/prescribing
         holder.btnExamine.setOnClickListener(v -> showExamineDialog(context, app));
+
+        // Click handler for viewing patient history
+        holder.btnHistory.setOnClickListener(v -> showHistoryDialog(context, app.getPatient_id(), app.getPatient_name()));
     }
 
     private void updateStatus(Context context, String appointmentId, String status) {
@@ -204,6 +207,72 @@ public class DoctorAppointmentAdapter extends RecyclerView.Adapter<DoctorAppoint
         dialog.show();
     }
 
+    private void showHistoryDialog(Context context, String patientId, String patientName) {
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_patient_history);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView tvTitle = dialog.findViewById(R.id.tvHistoryTitle);
+        tvTitle.setText("Tiền sử bệnh: " + (patientName != null ? patientName : ""));
+
+        RecyclerView rvHistory = dialog.findViewById(R.id.rvPatientHistory);
+        rvHistory.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(context));
+
+        Button btnClose = dialog.findViewById(R.id.btnCloseHistory);
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        RetrofitClient.getInstance().getApiService().getPatientMedicalRecords(patientId).enqueue(new Callback<List<com.example.healthbook.data.models.MedicalRecord>>() {
+            @Override
+            public void onResponse(Call<List<com.example.healthbook.data.models.MedicalRecord>> call, Response<List<com.example.healthbook.data.models.MedicalRecord>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<com.example.healthbook.data.models.MedicalRecord> records = response.body();
+                    rvHistory.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+                        @NonNull
+                        @Override
+                        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                            View view = LayoutInflater.from(context).inflate(R.layout.item_patient_history, parent, false);
+                            return new RecyclerView.ViewHolder(view) {};
+                        }
+                        @Override
+                        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                            com.example.healthbook.data.models.MedicalRecord record = records.get(position);
+                            TextView tvDate = holder.itemView.findViewById(R.id.tvHistoryDate);
+                            TextView tvDiagnosis = holder.itemView.findViewById(R.id.tvHistoryDiagnosis);
+                            TextView tvPrescription = holder.itemView.findViewById(R.id.tvHistoryPrescription);
+                            
+                            // Try to format date
+                            try {
+                                java.text.SimpleDateFormat inFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault());
+                                java.text.SimpleDateFormat outFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault());
+                                java.util.Date d = inFormat.parse(record.getCreated_at());
+                                tvDate.setText("Khám ngày: " + outFormat.format(d));
+                            } catch (Exception e) {
+                                tvDate.setText("Ngày khám: " + record.getCreated_at());
+                            }
+                            
+                            tvDiagnosis.setText("Chẩn đoán: " + record.getDiagnosis());
+                            tvPrescription.setText("Đơn thuốc: " + record.getPrescription());
+                        }
+                        @Override
+                        public int getItemCount() { return records.size(); }
+                    });
+                    if (records.isEmpty()) {
+                        Toast.makeText(context, "Bệnh nhân này chưa có tiền sử bệnh án nào.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<List<com.example.healthbook.data.models.MedicalRecord>> call, Throwable t) {
+                Toast.makeText(context, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
     @Override
     public int getItemCount() {
         return list.size();
@@ -212,7 +281,7 @@ public class DoctorAppointmentAdapter extends RecyclerView.Adapter<DoctorAppoint
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvPatientName, tvApptDateTime, tvPatientDetails, tvApptStatus;
         View layoutActions;
-        Button btnCancel, btnApprove, btnExamine;
+        Button btnCancel, btnApprove, btnExamine, btnHistory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -224,6 +293,7 @@ public class DoctorAppointmentAdapter extends RecyclerView.Adapter<DoctorAppoint
             btnCancel = itemView.findViewById(R.id.btnCancel);
             btnApprove = itemView.findViewById(R.id.btnApprove);
             btnExamine = itemView.findViewById(R.id.btnExamine);
+            btnHistory = itemView.findViewById(R.id.btnHistory);
         }
     }
 }

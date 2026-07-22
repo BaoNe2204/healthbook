@@ -94,6 +94,24 @@ public class ApiRepository {
         });
     }
 
+    public void cancelAppointment(String id, Callback<Void> callback) {
+        RetrofitClient.getInstance().getApiService().cancelAppointment(id).enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onFailure(new Exception("API Error cancelling appointment"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onFailure(new Exception(t));
+            }
+        });
+    }
+
     public void getUserProfile(Callback<com.example.healthbook.data.models.UserProfile> callback) {
         RetrofitClient.getInstance().getApiService().getUserProfile().enqueue(new retrofit2.Callback<com.example.healthbook.data.models.UserProfile>() {
             @Override

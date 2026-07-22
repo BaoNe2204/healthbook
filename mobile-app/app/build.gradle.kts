@@ -39,6 +39,7 @@ dependencies {
     // Firebase Auth
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 
     // Retrofit & Gson
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -52,6 +53,9 @@ dependencies {
     // Glide library to load online images
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    
+    // MPAndroidChart for charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

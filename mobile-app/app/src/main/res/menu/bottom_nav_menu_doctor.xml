@@ -13,6 +13,10 @@
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="Ca khám" />
     <item
+        android:id="@+id/navigation_doctor_patients"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Bệnh nhân" />
+    <item
         android:id="@+id/navigation_account"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Tài khoản" />

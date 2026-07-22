@@ -8,7 +8,7 @@ public class Appointment implements java.io.Serializable {
     private Doctor doctor;
     
     @SerializedName("doctor_id")
-    private int doctor_id;
+    private String doctor_id;
     
     @SerializedName("doctorName")
     private String doctorName;
@@ -30,6 +30,9 @@ public class Appointment implements java.io.Serializable {
 
     @SerializedName("type")
     private String type; // Khám tại bệnh viện, Khám online
+
+    @SerializedName("patient_id")
+    private String patient_id;
 
     @SerializedName("patient_name")
     private String patient_name;
@@ -53,11 +56,7 @@ public class Appointment implements java.io.Serializable {
         this.status = status;
         this.type = type;
         if (doctor != null) {
-            try {
-                this.doctor_id = Integer.parseInt(doctor.getId());
-            } catch (Exception e) {
-                this.doctor_id = 0;
-            }
+            this.doctor_id = doctor.getId();
             this.doctorName = doctor.getName();
             this.specialty = doctor.getSpecialty();
             this.hospital = doctor.getHospital();
@@ -68,7 +67,7 @@ public class Appointment implements java.io.Serializable {
     
     public Doctor getDoctor() { 
         if (doctor == null && doctorName != null) {
-            doctor = new Doctor(String.valueOf(doctor_id), doctorName, specialty, hospital, 4.8, 100, 0, 5, 300000, "");
+            doctor = new Doctor(doctor_id, doctorName, specialty, hospital, 4.8, 100, 0, 5, 300000, "");
         }
         return doctor; 
     }
@@ -82,11 +81,7 @@ public class Appointment implements java.io.Serializable {
     public void setDoctor(Doctor doctor) { 
         this.doctor = doctor; 
         if (doctor != null) {
-            try {
-                this.doctor_id = Integer.parseInt(doctor.getId());
-            } catch (Exception e) {
-                this.doctor_id = 0;
-            }
+            this.doctor_id = doctor.getId();
             this.doctorName = doctor.getName();
             this.specialty = doctor.getSpecialty();
             this.hospital = doctor.getHospital();
@@ -97,8 +92,8 @@ public class Appointment implements java.io.Serializable {
     public void setStatus(String status) { this.status = status; }
     public void setType(String type) { this.type = type; }
     
-    public int getDoctorId() { return doctor_id; }
-    public void setDoctorId(int doctor_id) { this.doctor_id = doctor_id; }
+    public String getDoctorId() { return doctor_id; }
+    public void setDoctorId(String doctor_id) { this.doctor_id = doctor_id; }
     
     public String getPatient_name() { return patient_name; }
     public void setPatient_name(String patient_name) { this.patient_name = patient_name; }
@@ -108,5 +103,7 @@ public class Appointment implements java.io.Serializable {
     public void setPatient_dob(String patient_dob) { this.patient_dob = patient_dob; }
     public String getPatient_gender() { return patient_gender; }
     public void setPatient_gender(String patient_gender) { this.patient_gender = patient_gender; }
+    public String getPatient_id() { return patient_id; }
+    public void setPatient_id(String patient_id) { this.patient_id = patient_id; }
 }
 

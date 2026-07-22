@@ -10,6 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from public/uploads
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 // Set up db middleware so routers can access it if needed (optional, or they can require it directly)
 app.use((req, res, next) => {
     req.db = db;
@@ -20,6 +24,90 @@ app.use((req, res, next) => {
 app.use('/api/users', usersRouter);
 app.use('/api/doctor', doctorRouter);
 app.use('/api/admin', adminRouter);
+
+// GET Vaccines
+app.get('/api/vaccines', async (req, res) => {
+    try {
+        const snapshot = await db.collection('Vaccines').get();
+        if (snapshot.empty) {
+            // Seed mock data
+            const mockVaccines = [
+                { name: "Vắc xin 6 trong 1 (Pháp)", price: 1050000, disease: "Bạch hầu, ho gà, uốn ván, bại liệt, Hib, viêm gan B", requiredDoses: 3, ageGroup: "2-24 tháng" },
+                { name: "Vắc xin Cúm tứ giá (Pháp)", price: 350000, disease: "Cúm mùa", requiredDoses: 1, ageGroup: "Từ 6 tháng trở lên" },
+                { name: "Vắc xin Thủy đậu (Mỹ)", price: 900000, disease: "Thủy đậu", requiredDoses: 2, ageGroup: "Từ 12 tháng trở lên" },
+                { name: "Vắc xin HPV (Mỹ)", price: 1800000, disease: "Ung thư cổ tử cung", requiredDoses: 3, ageGroup: "Nữ 9-26 tuổi" },
+                { name: "Vắc xin Phế cầu (Bỉ)", price: 1050000, disease: "Viêm phổi, viêm màng não do phế cầu", requiredDoses: 3, ageGroup: "Từ 6 tuần tuổi" }
+            ];
+            const batch = db.batch();
+            mockVaccines.forEach(v => {
+                const docRef = db.collection('Vaccines').doc();
+                batch.set(docRef, v);
+            });
+            await batch.commit();
+            
+            // Return seeded data
+            const newSnapshot = await db.collection('Vaccines').get();
+            const vaccines = [];
+            newSnapshot.forEach(doc => vaccines.push({ id: doc.id, ...doc.data() }));
+            return res.json(vaccines);
+        }
+
+        const vaccines = [];
+        snapshot.forEach(doc => vaccines.push({ id: doc.id, ...doc.data() }));
+        res.json(vaccines);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST Vaccine Bookings
+app.post('/api/vaccine-bookings', verifyToken, async (req, res) => {
+    try {
+        const data = req.body;
+        const patientId = req.user.uid;
+        
+        const bookingData = {
+            patient_id: patientId,
+            vaccine_id: data.vaccine_id,
+            vaccine_name: data.vaccine_name,
+            price: data.price,
+            appointment_date: data.appointment_date,
+            appointment_time: data.appointment_time,
+            status: 'Sắp tới',
+            patient_name: data.patient_name || null,
+            patient_phone: data.patient_phone || null,
+            created_at: new Date().toISOString()
+        };
+        
+        const docRef = await db.collection('VaccineBookings').add(bookingData);
+        res.json({ id: docRef.id, ...bookingData });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Vaccine Bookings
+app.get('/api/vaccine-bookings', verifyToken, async (req, res) => {
+    try {
+        const patientId = req.user.uid;
+        const snapshot = await db.collection('VaccineBookings')
+            .where('patient_id', '==', patientId)
+            .get();
+            
+        const bookings = [];
+        snapshot.forEach(doc => {
+            bookings.push({ id: doc.id, ...doc.data() });
+        });
+        
+        bookings.sort((a, b) => {
+            return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        });
+        
+        res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -32,8 +120,15 @@ app.get('/api/doctors', async (req, res) => {
     try {
         const snapshot = await db.collection('Doctors').get();
         const doctors = [];
+        const seen = new Set();
         snapshot.forEach(doc => {
-            doctors.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const key = data.name || data.email;
+            if (key) {
+                if (seen.has(key)) return;
+                seen.add(key);
+            }
+            doctors.push({ id: doc.id, ...data });
         });
         res.json(doctors);
     } catch (error) {
@@ -60,8 +155,15 @@ app.get('/api/hospitals', async (req, res) => {
     try {
         const snapshot = await db.collection('Hospitals').get();
         const hospitals = [];
+        const seen = new Set();
         snapshot.forEach(doc => {
-            hospitals.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const key = data.name;
+            if (key) {
+                if (seen.has(key)) return;
+                seen.add(key);
+            }
+            hospitals.push({ id: doc.id, ...data });
         });
         res.json(hospitals);
     } catch (error) {
@@ -74,8 +176,15 @@ app.get('/api/clinics', async (req, res) => {
     try {
         const snapshot = await db.collection('Clinics').get();
         const clinics = [];
+        const seen = new Set();
         snapshot.forEach(doc => {
-            clinics.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const key = data.name;
+            if (key) {
+                if (seen.has(key)) return;
+                seen.add(key);
+            }
+            clinics.push({ id: doc.id, ...data });
         });
         res.json(clinics);
     } catch (error) {
@@ -140,6 +249,8 @@ app.post('/api/appointments', verifyToken, async (req, res) => {
             patient_id: patientId,
             doctor_id: data.doctor_id,
             doctorName: data.doctorName || '',
+            specialty: data.specialty || '',
+            hospital: data.hospital || '',
             appointment_date: data.appointment_date,
             appointment_time: data.appointment_time,
             status: data.status || 'Sắp tới',
@@ -154,7 +265,35 @@ app.post('/api/appointments', verifyToken, async (req, res) => {
         const docRef = await db.collection('Appointments').add(appointmentData);
         appointmentData.id = docRef.id;
         
+        // Sinh thông báo
+        await db.collection('Notifications').add({
+            user_id: patientId,
+            title: 'Đặt lịch khám thành công',
+            body: `Yêu cầu đặt lịch khám với ${data.doctorName || 'Bác sĩ'} lúc ${data.appointment_time} ngày ${data.appointment_date} đã được gửi. Đang chờ xác nhận.`,
+            type: 'APPOINTMENT_BOOKED',
+            created_at: new Date().toISOString()
+        });
+        
         res.status(201).json(appointmentData);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PUT Appointments (Cancel appointment)
+app.put('/api/appointments/:id/cancel', verifyToken, async (req, res) => {
+    try {
+        const appointmentId = req.params.id;
+        const patientId = req.user.uid;
+        
+        const docRef = db.collection('Appointments').doc(appointmentId);
+        const doc = await docRef.get();
+        if (!doc.exists || doc.data().patient_id !== patientId) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        await docRef.update({ status: 'Đã hủy' });
+        res.json({ message: 'Appointment cancelled successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

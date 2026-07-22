@@ -116,6 +116,73 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Monthly Stats Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMonthlyStats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/primary_light"
+        app:layout_constraintTop_toBottomOf="@id/cardStats">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doanh thu tháng này"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRevenueMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0đ"
+                android:textColor="@color/primary_dark"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số bệnh nhân đã khám: "
+                    android:textColor="@color/primary_dark"
+                    android:textSize="13sp" />
+                
+                <TextView
+                    android:id="@+id/tvPatientsMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chartRevenue"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <!-- Title for list -->
     <TextView
         android:id="@+id/tvTitleList"
@@ -127,7 +194,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardStats" />
+        app:layout_constraintTop_toBottomOf="@id/cardMonthlyStats" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

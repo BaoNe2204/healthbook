@@ -35,6 +35,9 @@ public interface ApiService {
     @POST("/api/appointments")
     Call<Appointment> createAppointment(@Body Appointment appointment);
 
+    @retrofit2.http.PUT("/api/appointments/{id}/cancel")
+    Call<Void> cancelAppointment(@retrofit2.http.Path("id") String id);
+
     @POST("/api/users/register")
     Call<Void> registerUser(@Body Map<String, String> body);
 
@@ -44,8 +47,24 @@ public interface ApiService {
     @retrofit2.http.PUT("/api/users/profile")
     Call<Void> updateUserProfile(@Body com.example.healthbook.data.models.UserProfile profile);
 
+    @retrofit2.http.Multipart
+    @POST("/api/users/upload-avatar")
+    Call<Map<String, String>> uploadAvatar(@retrofit2.http.Part okhttp3.MultipartBody.Part avatar);
+
     @GET("/api/users/medical-records")
     Call<List<com.example.healthbook.data.models.MedicalRecord>> getMedicalRecords();
+
+    @GET("/api/vaccines")
+    Call<List<com.example.healthbook.data.models.Vaccine>> getVaccines();
+
+    @POST("/api/vaccine-bookings")
+    Call<Void> createVaccineBooking(@Body Map<String, Object> bookingData);
+
+    @GET("/api/vaccine-bookings")
+    Call<List<com.example.healthbook.data.models.VaccineBooking>> getVaccineBookings();
+
+    @GET("/api/users/notifications")
+    Call<List<com.example.healthbook.data.models.NotificationItem>> getNotifications();
 
     // Doctor Panel Endpoints
     @GET("/api/doctor/appointments")
@@ -84,4 +103,23 @@ public interface ApiService {
 
     @retrofit2.http.DELETE("/api/admin/specialties/{id}")
     Call<Void> deleteSpecialty(@retrofit2.http.Path("id") String id);
+
+    // Advanced Doctor Features
+    @GET("/api/doctor/patients/{patientId}/medical-records")
+    Call<List<com.example.healthbook.data.models.MedicalRecord>> getPatientMedicalRecords(@retrofit2.http.Path("patientId") String patientId);
+
+    @GET("/api/doctor/dashboard")
+    Call<Map<String, Object>> getDoctorDashboard();
+
+    @retrofit2.http.PUT("/api/doctor/profile/fee")
+    Call<Void> updateConsultationFee(@Body Map<String, Integer> body);
+
+    @GET("/api/doctor/reviews")
+    Call<List<com.example.healthbook.data.models.Review>> getDoctorReviews();
+
+    @POST("/api/users/reviews")
+    Call<Void> submitReview(@Body com.example.healthbook.data.models.Review review);
+
+    @GET("/api/doctor/my-patients")
+    Call<List<com.example.healthbook.data.models.Patient>> getDoctorMyPatients();
 }

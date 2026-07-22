@@ -18,11 +18,18 @@ import com.example.healthbook.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.Toast;
+import com.example.healthbook.data.models.NotificationItem;
+import com.example.healthbook.network.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView rvNotifications;
     private NotificationAdapter adapter;
-    private List<NotifItem> list = new ArrayList<>();
+    private List<NotificationItem> list = new ArrayList<>();
 
     @Nullable
     @Override
@@ -32,40 +39,38 @@ public class NotificationsFragment extends Fragment {
         rvNotifications = view.findViewById(R.id.rvNotifications);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        loadMockNotifications();
-        
         adapter = new NotificationAdapter(list);
         rvNotifications.setAdapter(adapter);
 
+        loadNotifications();
+        
         return view;
     }
 
-    private void loadMockNotifications() {
-        list.clear();
-        list.add(new NotifItem("Đăng ký thành công", "Chào mừng bạn đến với HealthBook! Tài khoản của bạn đã được khởi tạo thành công.", "Vừa xong", android.R.drawable.ic_dialog_info));
-        list.add(new NotifItem("Đặt lịch khám thành công", "Yêu cầu đặt lịch khám với TS.BS Nguyễn Văn A lúc 08:30 ngày 27/05/2026 đã được gửi. Đang chờ bác sĩ xác nhận.", "15 phút trước", android.R.drawable.ic_popup_reminder));
-        list.add(new NotifItem("Cập nhật hồ sơ", "Thông tin hồ sơ cá nhân của bạn đã được cập nhật thành công.", "1 giờ trước", android.R.drawable.ic_menu_myplaces));
-        list.add(new NotifItem("Lịch khám được duyệt", "Bác sĩ CKII Trần Thị Hằng đã xác nhận lịch khám cho bé vào lúc 14:00 ngày 28/05/2026.", " Hôm qua", android.R.drawable.ic_dialog_info));
-    }
+    private void loadNotifications() {
+        RetrofitClient.getInstance().getApiService().getNotifications().enqueue(new Callback<List<NotificationItem>>() {
+            @Override
+            public void onResponse(Call<List<NotificationItem>> call, Response<List<NotificationItem>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    list.clear();
+                    list.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi tải thông báo", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-    private static class NotifItem {
-        String title;
-        String body;
-        String time;
-        int iconRes;
-
-        NotifItem(String title, String body, String time, int iconRes) {
-            this.title = title;
-            this.body = body;
-            this.time = time;
-            this.iconRes = iconRes;
-        }
+            @Override
+            public void onFailure(Call<List<NotificationItem>> call, Throwable t) {
+                Toast.makeText(getContext(), "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private static class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
-        List<NotifItem> items;
+        List<NotificationItem> items;
 
-        NotificationAdapter(List<NotifItem> items) {
+        NotificationAdapter(List<NotificationItem> items) {
             this.items = items;
         }
 
@@ -78,11 +83,21 @@ public class NotificationsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            NotifItem item = items.get(position);
-            holder.tvTitle.setText(item.title);
-            holder.tvBody.setText(item.body);
-            holder.tvTime.setText(item.time);
-            holder.ivIcon.setImageResource(item.iconRes);
+            NotificationItem item = items.get(position);
+            holder.tvTitle.setText(item.getTitle());
+            holder.tvBody.setText(item.getBody());
+            
+            // Format time if needed, for now just show raw or a placeholder
+            String timeStr = item.getCreated_at() != null ? item.getCreated_at().substring(0, 10) : "Vừa xong";
+            holder.tvTime.setText(timeStr);
+            
+            int iconRes = android.R.drawable.ic_dialog_info;
+            if ("REGISTER".equals(item.getType())) iconRes = android.R.drawable.ic_menu_myplaces;
+            else if ("PROFILE_UPDATE".equals(item.getType())) iconRes = android.R.drawable.ic_menu_edit;
+            else if ("APPOINTMENT_BOOKED".equals(item.getType())) iconRes = android.R.drawable.ic_menu_agenda;
+            else if ("APPOINTMENT_APPROVED".equals(item.getType())) iconRes = android.R.drawable.ic_popup_reminder;
+            
+            holder.ivIcon.setImageResource(iconRes);
         }
 
         @Override

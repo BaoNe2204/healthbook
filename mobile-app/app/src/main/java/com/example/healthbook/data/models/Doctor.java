@@ -31,6 +31,8 @@ public class Doctor implements Serializable {
         this.description = description;
     }
 
+    private int consultationFee;
+
     // Getters
     public String getId() { return id; }
     public String getName() { return name; }
@@ -42,6 +44,7 @@ public class Doctor implements Serializable {
     public String getImageUrl() { return imageUrl; }
     public int getExperience() { return experience; }
     public int getPrice() { return price; }
+    public int getConsultationFee() { return consultationFee > 0 ? consultationFee : (price > 0 ? price : 200000); }
     public String getDescription() { return description; }
 
     // Setters

@@ -218,6 +218,12 @@
         layout="@layout/fragment_doctor_appointments" />
 
     <fragment
+        android:id="@+id/navigation_doctor_patients"
+        android:name="com.example.healthbook.ui.doctor.DoctorPatientsFragment"
+        android:label="Bệnh nhân"
+        layout="@layout/fragment_doctor_patients" />
+
+    <fragment
         android:id="@+id/navigation_admin_dashboard"
         android:name="com.example.healthbook.ui.admin.AdminDashboardFragment"
         android:label="Tổng quan"
@@ -240,5 +246,17 @@
         android:name="com.example.healthbook.ui.profile.MedicalHistoryFragment"
         android:label="Lịch sử bệnh án"
         layout="@layout/fragment_medical_history" />
+
+    <fragment
+        android:id="@+id/vaccinationFragment"
+        android:name="com.example.healthbook.ui.vaccination.VaccinationFragment"
+        android:label="Tiêm chủng"
+        layout="@layout/fragment_vaccination" />
+
+    <fragment
+        android:id="@+id/vaccinationHistoryFragment"
+        android:name="com.example.healthbook.ui.profile.VaccinationHistoryFragment"
+        android:label="Lịch sử tiêm chủng"
+        layout="@layout/fragment_vaccination_history" />
 
 </navigation>

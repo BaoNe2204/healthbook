@@ -25,6 +25,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/ivAvatarProfile"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/avatar_placeholder"
@@ -46,6 +47,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvUserInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -57,6 +59,24 @@
 
     <!-- Stats Grid -->
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/btnEditMetrics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Chỉnh sửa"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            android:padding="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/llMetrics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -85,10 +105,11 @@
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
                 <TextView
+                    android:id="@+id/tvWeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="70 kg"
+                    android:text="-- kg"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
@@ -117,10 +138,11 @@
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
                 <TextView
+                    android:id="@+id/tvHeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="175 cm"
+                    android:text="-- cm"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
@@ -148,21 +170,24 @@
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
                 <TextView
+                    android:id="@+id/tvBmi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="22.9"
+                    android:text="--"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
                 <TextView
+                    android:id="@+id/tvBmiStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bình thường"
+                    android:text="Chưa rõ"
                     android:textSize="10sp"
-                    android:textColor="@color/success" />
+                    android:textColor="#4CAF50" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -173,6 +198,7 @@
         android:background="@drawable/bg_rounded_white">
         
         <TextView
+            android:id="@+id/btnTestResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -205,6 +231,19 @@
             android:text="Bệnh án"
             android:textColor="@color/text_primary"
             android:drawableStart="@android:drawable/ic_menu_info_details"
+            android:drawablePadding="16dp"
+            android:drawableEnd="@android:drawable/ic_media_play" />
+            
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+        
+        <TextView
+            android:id="@+id/btnVaccinationHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Lịch sử tiêm chủng"
+            android:textColor="@color/text_primary"
+            android:drawableStart="@android:drawable/ic_menu_add"
             android:drawablePadding="16dp"
             android:drawableEnd="@android:drawable/ic_media_play" />
     </LinearLayout>

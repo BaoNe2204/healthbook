@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đặt lịch tiêm chủng"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvDialogVaccineName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên vắc xin"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/tvSelectDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn ngày tiêm"
+        android:padding="12dp"
+        android:background="@drawable/border_bg"
+        android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvSelectTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn giờ tiêm"
+        android:padding="12dp"
+        android:background="@drawable/border_bg"
+        android:drawableEnd="@android:drawable/ic_menu_recent_history"
+        android:layout_marginBottom="24dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirmBooking"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Xác nhận đặt lịch" />
+</LinearLayout>

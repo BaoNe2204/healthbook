@@ -138,6 +138,34 @@
                 android:drawableEnd="@android:drawable/ic_media_play" />
                 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" />
+
+            <TextView
+                android:id="@+id/btnFeeSetup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Thiết lập giá khám (Dành cho Bác sĩ)"
+                android:textColor="@color/primary"
+                android:drawableStart="@android:drawable/ic_menu_edit"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play"
+                android:visibility="gone" />
+
+            <View android:id="@+id/dividerFee" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/btnMyReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Đánh giá của tôi (Dành cho Bác sĩ)"
+                android:textColor="@color/primary"
+                android:drawableStart="@android:drawable/btn_star"
+                android:drawablePadding="16dp"
+                android:drawableEnd="@android:drawable/ic_media_play"
+                android:visibility="gone" />
+
+            <View android:id="@+id/dividerReviews" android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_200" android:layout_marginHorizontal="16dp" android:visibility="gone" />
             
             <TextView
                 android:id="@+id/btnHealthInsurance"

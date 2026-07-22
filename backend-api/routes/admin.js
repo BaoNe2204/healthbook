@@ -44,8 +44,19 @@ router.get('/users', async (req, res) => {
         const db = req.db;
         const snapshot = await db.collection('Users').get();
         const users = [];
+        const seen = new Set();
         snapshot.forEach(doc => {
-            users.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const role = data.role ? data.role.toUpperCase() : '';
+            // For doctors, hospitals, clinics, avoid duplicates by name or email
+            if (role === 'DOCTOR' || role === 'HOSPITAL' || role === 'CLINIC') {
+                const key = data.displayName || data.email;
+                if (key) {
+                    if (seen.has(key)) return;
+                    seen.add(key);
+                }
+            }
+            users.push({ id: doc.id, ...data });
         });
         res.json(users);
     } catch (error) {

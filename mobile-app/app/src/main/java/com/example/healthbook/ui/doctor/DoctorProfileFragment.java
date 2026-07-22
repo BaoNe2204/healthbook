@@ -67,7 +67,7 @@ public class DoctorProfileFragment extends Fragment {
                 tvDescription.setText("Bác sĩ " + doctor.getName() + " là một chuyên gia tận tâm với nghề.");
             }
             
-            int price = doctor.getPrice() > 0 ? doctor.getPrice() : 300000;
+            int price = doctor.getConsultationFee() > 0 ? doctor.getConsultationFee() : 300000;
             tvPriceInfo.setText("Phí tư vấn " + String.format("%,d", price).replace(',', '.') + "đ/ lượt");
             
             if (doctor.getImageResId() != 0) {
@@ -150,9 +150,11 @@ public class DoctorProfileFragment extends Fragment {
         if (btnChat != null) {
             btnChat.setOnClickListener(v -> {
                 if (doctor != null) {
-                    Bundle args = new Bundle();
-                    args.putString("doctorName", doctor.getName());
-                    Navigation.findNavController(v).navigate(R.id.chatFragment, args);
+                    android.content.Intent intent = new android.content.Intent(getContext(), com.example.healthbook.ui.chat.ChatActivity.class);
+                    // Dùng id của Bác sĩ làm OTHER_USER_ID, nếu doctor.getId() null thì dùng "doctor123" tạm
+                    intent.putExtra("OTHER_USER_ID", doctor.getId() != null ? doctor.getId() : "doctor123");
+                    intent.putExtra("OTHER_USER_NAME", doctor.getName());
+                    startActivity(intent);
                 }
             });
         }

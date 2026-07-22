@@ -29,8 +29,24 @@ public class AppointmentDetailFragment extends Fragment {
                     if (getArguments() != null && getArguments().containsKey("appointment")) {
                         com.example.healthbook.data.models.Appointment appt = (com.example.healthbook.data.models.Appointment) getArguments().getSerializable("appointment");
                         if (appt != null) {
-                            com.example.healthbook.data.MockData.removeAppointment(appt.getId());
-                            android.widget.Toast.makeText(getContext(), "Đã hủy lịch hẹn thành công!", android.widget.Toast.LENGTH_SHORT).show();
+                            com.example.healthbook.data.ApiRepository repo = new com.example.healthbook.data.ApiRepository();
+                            repo.cancelAppointment(appt.getId(), new com.example.healthbook.data.ApiRepository.Callback<Void>() {
+                                @Override
+                                public void onSuccess(Void result) {
+                                    if (getContext() != null) {
+                                        android.widget.Toast.makeText(getContext(), "Đã hủy lịch hẹn thành công!", android.widget.Toast.LENGTH_SHORT).show();
+                                    }
+                                    Navigation.findNavController(v).popBackStack();
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    if (getContext() != null) {
+                                        android.widget.Toast.makeText(getContext(), "Lỗi khi hủy lịch hẹn!", android.widget.Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            return; // Wait for API response before navigating back
                         }
                     }
                     Navigation.findNavController(v).popBackStack();
@@ -50,9 +66,17 @@ public class AppointmentDetailFragment extends Fragment {
                         tvStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
                     } else if ("Đã qua".equals(appointment.getStatus())) {
                         tvStatus.setTextColor(android.graphics.Color.parseColor("#9E9E9E")); // Gray
+                    } else if ("Đã hủy".equals(appointment.getStatus())) {
+                        tvStatus.setTextColor(android.graphics.Color.parseColor("#F44336")); // Red
                     } else {
                         tvStatus.setTextColor(android.graphics.Color.parseColor("#FF9800")); // Orange
                     }
+                }
+                
+                if ("Đã hủy".equals(appointment.getStatus()) || "Đã qua".equals(appointment.getStatus())) {
+                    btnCancel.setVisibility(View.GONE);
+                } else {
+                    btnCancel.setVisibility(View.VISIBLE);
                 }
                 
                 // Doctor info

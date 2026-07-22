@@ -61,8 +61,80 @@ public class DoctorHomeFragment extends Fragment {
         }
 
         loadTodayAppointments();
+        loadDashboard();
 
         return view;
+    }
+
+    private void loadDashboard() {
+        RetrofitClient.getInstance().getApiService().getDoctorDashboard().enqueue(new Callback<java.util.Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<java.util.Map<String, Object>> call, Response<java.util.Map<String, Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (getView() == null) return;
+                    TextView tvRevenueMonth = getView().findViewById(R.id.tvRevenueMonth);
+                    TextView tvPatientsMonth = getView().findViewById(R.id.tvPatientsMonth);
+                    if (tvRevenueMonth != null && tvPatientsMonth != null) {
+                        try {
+                            double revenue = (Double) response.body().get("thisMonthRevenue");
+                            double patients = (Double) response.body().get("thisMonthAppointments");
+                            
+                            java.text.NumberFormat formatter = new java.text.DecimalFormat("#,###");
+                            tvRevenueMonth.setText(formatter.format(revenue) + "đ");
+                            tvPatientsMonth.setText(String.valueOf((int)patients));
+
+                            // Chart logic
+                            com.github.mikephil.charting.charts.BarChart chartRevenue = getView().findViewById(R.id.chartRevenue);
+                            if (chartRevenue != null && response.body().containsKey("last7DaysData")) {
+                                java.util.Map<String, Object> chartData = (java.util.Map<String, Object>) response.body().get("last7DaysData");
+                                List<String> dates = (List<String>) chartData.get("dates");
+                                List<Double> counts = (List<Double>) chartData.get("counts");
+
+                                List<com.github.mikephil.charting.data.BarEntry> entries = new ArrayList<>();
+                                for (int i = 0; i < counts.size(); i++) {
+                                    // Đảo ngược mảng vì backend trả về từ cũ đến mới (từ i=6 về i=0)
+                                    // Backend: i=6 là 6 ngày trước, i=0 là hôm nay.
+                                    entries.add(new com.github.mikephil.charting.data.BarEntry(i, counts.get(6 - i).floatValue()));
+                                }
+
+                                com.github.mikephil.charting.data.BarDataSet dataSet = new com.github.mikephil.charting.data.BarDataSet(entries, "Số lượt khám");
+                                dataSet.setColor(getResources().getColor(R.color.primary));
+                                dataSet.setValueTextSize(10f);
+
+                                com.github.mikephil.charting.data.BarData barData = new com.github.mikephil.charting.data.BarData(dataSet);
+                                chartRevenue.setData(barData);
+                                chartRevenue.getDescription().setEnabled(false);
+                                chartRevenue.getLegend().setEnabled(false);
+
+                                com.github.mikephil.charting.components.XAxis xAxis = chartRevenue.getXAxis();
+                                xAxis.setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
+                                xAxis.setDrawGridLines(false);
+                                xAxis.setGranularity(1f);
+                                
+                                // Đảo ngược mảng dates tương tự
+                                List<String> reversedDates = new ArrayList<>();
+                                for(int i = 6; i >= 0; i--) reversedDates.add(dates.get(i));
+                                
+                                xAxis.setValueFormatter(new com.github.mikephil.charting.formatter.IndexAxisValueFormatter(reversedDates));
+
+                                chartRevenue.getAxisRight().setEnabled(false);
+                                chartRevenue.getAxisLeft().setAxisMinimum(0f);
+                                chartRevenue.getAxisLeft().setGranularity(1f);
+
+                                chartRevenue.invalidate();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<java.util.Map<String, Object>> call, Throwable t) {
+                // Ignore failure for dashboard for now
+            }
+        });
     }
 
     private void loadTodayAppointments() {

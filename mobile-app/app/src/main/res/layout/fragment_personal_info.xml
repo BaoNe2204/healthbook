@@ -67,6 +67,7 @@
                 </com.google.android.material.card.MaterialCardView>
                     
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnEditAvatar"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"

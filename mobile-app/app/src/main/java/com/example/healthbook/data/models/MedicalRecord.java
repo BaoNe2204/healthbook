@@ -5,16 +5,16 @@ import java.io.Serializable;
 
 public class MedicalRecord implements Serializable {
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("doctor_id")
-    private int doctorId;
+    private String doctorId;
 
     @SerializedName("patient_id")
     private String patientId;
 
     @SerializedName("appointment_id")
-    private int appointmentId;
+    private String appointmentId;
 
     @SerializedName("diagnosis")
     private String diagnosis;
@@ -40,17 +40,23 @@ public class MedicalRecord implements Serializable {
     @SerializedName("appointment_time")
     private String appointmentTime;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    @SerializedName("created_at")
+    private String created_at;
 
-    public int getDoctorId() { return doctorId; }
-    public void setDoctorId(int doctorId) { this.doctorId = doctorId; }
+    public String getCreated_at() { return created_at; }
+    public void setCreated_at(String created_at) { this.created_at = created_at; }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
+    public String getDoctorId() { return doctorId; }
+    public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
 
     public String getPatientId() { return patientId; }
     public void setPatientId(String patientId) { this.patientId = patientId; }
 
-    public int getAppointmentId() { return appointmentId; }
-    public void setAppointmentId(int appointmentId) { this.appointmentId = appointmentId; }
+    public String getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(String appointmentId) { this.appointmentId = appointmentId; }
 
     public String getDiagnosis() { return diagnosis; }
     public void setDiagnosis(String diagnosis) { this.diagnosis = diagnosis; }
