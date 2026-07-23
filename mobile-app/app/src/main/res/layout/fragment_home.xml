@@ -90,10 +90,10 @@
                     android:textStyle="bold" />
                     
                 <ImageView
+                    android:id="@+id/ivBanner"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    app:tint="@android:color/white" />
+                    android:src="@android:drawable/ic_menu_gallery" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -40,13 +40,18 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         holder.tvRating.setText(String.valueOf(doctor.getRating()));
         holder.tvReviews.setText(doctor.getReviewCount() + "+ lượt khám");
 
-        if (doctor.getImageUrl() != null && !doctor.getImageUrl().isEmpty()) {
-            com.bumptech.glide.Glide.with(holder.itemView.getContext())
-                    .load(doctor.getImageUrl())
-                    .circleCrop()
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .into(holder.ivAvatar);
+        String avatarUrl = doctor.getImageUrl();
+        if (avatarUrl == null || avatarUrl.isEmpty()) {
+            // Generate a nice avatar based on doctor's name
+            String encodedName = android.net.Uri.encode(doctor.getName() != null ? doctor.getName() : "Doctor");
+            avatarUrl = "https://ui-avatars.com/api/?name=" + encodedName + "&background=E3F2FD&color=1976D2&size=128&rounded=true";
         }
+        
+        com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                .load(avatarUrl)
+                .circleCrop()
+                .placeholder(R.drawable.avatar_placeholder)
+                .into(holder.ivAvatar);
 
         holder.btnBook.setOnClickListener(v -> {
             if (listener != null) {
