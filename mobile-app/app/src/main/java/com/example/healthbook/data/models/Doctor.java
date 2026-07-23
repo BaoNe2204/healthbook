@@ -58,4 +58,5 @@ public class Doctor implements Serializable {
     public void setExperience(int experience) { this.experience = experience; }
     public void setPrice(int price) { this.price = price; }
     public void setDescription(String description) { this.description = description; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

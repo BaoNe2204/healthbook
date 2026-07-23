@@ -141,8 +141,15 @@ app.get('/api/specialties', async (req, res) => {
     try {
         const snapshot = await db.collection('Specialties').get();
         const specialties = [];
+        const seen = new Set();
         snapshot.forEach(doc => {
-            specialties.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const key = data.name;
+            if (key) {
+                if (seen.has(key)) return;
+                seen.add(key);
+            }
+            specialties.push({ id: doc.id, ...data });
         });
         res.json(specialties);
     } catch (error) {

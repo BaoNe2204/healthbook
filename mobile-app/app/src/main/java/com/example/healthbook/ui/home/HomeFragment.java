@@ -35,6 +35,18 @@ public class HomeFragment extends Fragment {
         }
 
         // Fetch latest profile from server to update display name instantly
+        
+        // Load Banner Image
+        android.widget.ImageView ivBanner = view.findViewById(R.id.ivBanner);
+        if (ivBanner != null) {
+            ivBanner.setPadding(0, 0, 0, 0);
+            ivBanner.clearColorFilter();
+            com.bumptech.glide.Glide.with(this)
+                    .load("https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=400&auto=format&fit=crop")
+                    .centerCrop()
+                    .into(ivBanner);
+        }
+
         com.example.healthbook.network.RetrofitClient.getInstance().getApiService().getUserProfile().enqueue(new retrofit2.Callback<com.example.healthbook.data.models.UserProfile>() {
             @Override
             public void onResponse(retrofit2.Call<com.example.healthbook.data.models.UserProfile> call, retrofit2.Response<com.example.healthbook.data.models.UserProfile> response) {

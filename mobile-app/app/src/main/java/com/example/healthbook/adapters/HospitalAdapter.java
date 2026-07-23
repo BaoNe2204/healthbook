@@ -30,14 +30,18 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         holder.tvName.setText(hospital.getName());
         holder.tvAddress.setText(hospital.getAddress());
 
-        if (hospital.getImageUrl() != null && !hospital.getImageUrl().isEmpty()) {
-            holder.ivImage.setPadding(0, 0, 0, 0);
-            holder.ivImage.clearColorFilter();
-            com.bumptech.glide.Glide.with(holder.itemView.getContext())
-                    .load(hospital.getImageUrl())
-                    .centerCrop()
-                    .into(holder.ivImage);
+        int fallbackImage = R.drawable.hospital_1;
+        if (hospital.getName() != null) {
+            if (hospital.getName().contains("Nhi")) fallbackImage = R.drawable.hospital_2;
+            else if (hospital.getName().contains("Việt Đức")) fallbackImage = R.drawable.hospital_3;
         }
+
+        holder.ivImage.setPadding(0, 0, 0, 0);
+        holder.ivImage.clearColorFilter();
+        com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                .load(fallbackImage)
+                .centerCrop()
+                .into(holder.ivImage);
 
         holder.itemView.setOnClickListener(v -> {
             android.os.Bundle args = new android.os.Bundle();

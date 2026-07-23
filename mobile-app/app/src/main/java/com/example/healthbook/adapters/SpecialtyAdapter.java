@@ -30,16 +30,21 @@ public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.View
         Specialty specialty = specialties.get(position);
         holder.tvName.setText(specialty.getName());
 
-        int iconRes = android.R.drawable.ic_menu_compass;
         String name = specialty.getName() != null ? specialty.getName().toLowerCase() : "";
+        int iconRes = R.drawable.ic_specialty_heart; // Default
+        
         if (name.contains("tim")) {
-            iconRes = android.R.drawable.btn_star_big_on;
+            iconRes = R.drawable.ic_specialty_heart;
         } else if (name.contains("nhi")) {
-            iconRes = android.R.drawable.ic_menu_myplaces;
+            iconRes = R.drawable.ic_specialty_child;
         } else if (name.contains("da")) {
-            iconRes = android.R.drawable.ic_menu_camera;
+            iconRes = R.drawable.ic_specialty_face;
         } else if (name.contains("sản")) {
-            iconRes = android.R.drawable.ic_menu_view;
+            iconRes = R.drawable.ic_specialty_pregnant;
+        } else if (name.contains("răng") || name.contains("nha")) {
+            iconRes = R.drawable.ic_specialty_smile;
+        } else if (name.contains("mũi") || name.contains("tai")) {
+            iconRes = R.drawable.ic_specialty_ear;
         }
 
         holder.ivIcon.setImageResource(iconRes);
