@@ -19,6 +19,11 @@ public class AppointmentDetailFragment extends Fragment {
 
         ImageView btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+        
+        View btnBookDoctor = view.findViewById(R.id.btnBookDoctor);
+        if (btnBookDoctor != null) {
+            btnBookDoctor.setVisibility(View.GONE);
+        }
 
         View btnCancel = view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(v -> {
