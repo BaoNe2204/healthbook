@@ -96,18 +96,20 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp"/>
                 
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/rgPaymentMethods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/bg_rounded_white"
                 android:padding="16dp">
                 
-                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ví Momo" android:padding="8dp"/>
-                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ZaloPay" android:padding="8dp"/>
-                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Thẻ ngân hàng" android:padding="8dp"/>
-                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Chuyển khoản ngân hàng" android:padding="8dp"/>
-            </LinearLayout>
+                <RadioButton android:id="@+id/rbMomo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ví Momo" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rbZaloPay" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ZaloPay" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rbBankCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Thẻ ngân hàng" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rbBankTransfer" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Chuyển khoản ngân hàng" android:padding="8dp"/>
+                <RadioButton android:id="@+id/rbCash" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Thanh toán tiền mặt tại bệnh viện" android:padding="8dp" android:checked="true"/>
+            </RadioGroup>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
