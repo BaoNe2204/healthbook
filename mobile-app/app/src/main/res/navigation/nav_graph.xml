@@ -5,6 +5,30 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
+        android:id="@+id/navigation_clinic_dashboard"
+        android:name="com.example.healthbook.ui.clinic.ClinicDashboardFragment"
+        android:label="Đơn đặt phòng khám"
+        layout="@layout/fragment_clinic_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_clinic_schedule"
+        android:name="com.example.healthbook.ui.clinic.ClinicScheduleFragment"
+        android:label="Lịch khám"
+        layout="@layout/fragment_clinic_schedule" />
+
+    <fragment
+        android:id="@+id/navigation_clinic_revenue"
+        android:name="com.example.healthbook.ui.clinic.ClinicRevenueFragment"
+        android:label="Doanh thu"
+        layout="@layout/fragment_clinic_revenue" />
+
+    <fragment
+        android:id="@+id/navigation_clinic_chat_list"
+        android:name="com.example.healthbook.ui.clinic.ClinicChatListFragment"
+        android:label="Tin nhắn"
+        layout="@layout/fragment_clinic_chat_list" />
+
+    <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.healthbook.ui.home.HomeFragment"
         android:label="Trang chủ"

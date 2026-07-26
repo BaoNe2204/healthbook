@@ -27,19 +27,33 @@ public class AppointmentDetailFragment extends Fragment {
 
         View btnCancel = view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(v -> {
+            android.widget.EditText input = new android.widget.EditText(getContext());
+            input.setHint("Nhập lý do hủy (Bắt buộc)");
+            
             new android.app.AlertDialog.Builder(getContext())
                 .setTitle("Hủy lịch hẹn")
                 .setMessage("Bạn có chắc chắn muốn hủy lịch hẹn này không?")
+                .setView(input)
                 .setPositiveButton("Hủy lịch", (dialog, which) -> {
+                    String reason = input.getText().toString().trim();
+                    if (reason.isEmpty()) {
+                        android.widget.Toast.makeText(getContext(), "Vui lòng nhập lý do hủy!", android.widget.Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    
                     if (getArguments() != null && getArguments().containsKey("appointment")) {
                         com.example.healthbook.data.models.Appointment appt = (com.example.healthbook.data.models.Appointment) getArguments().getSerializable("appointment");
                         if (appt != null) {
                             com.example.healthbook.data.ApiRepository repo = new com.example.healthbook.data.ApiRepository();
-                            repo.cancelAppointment(appt.getId(), new com.example.healthbook.data.ApiRepository.Callback<Void>() {
+                            repo.cancelAppointment(appt.getId(), reason, new com.example.healthbook.data.ApiRepository.Callback<Void>() {
                                 @Override
                                 public void onSuccess(Void result) {
                                     if (getContext() != null) {
-                                        android.widget.Toast.makeText(getContext(), "Đã hủy lịch hẹn thành công!", android.widget.Toast.LENGTH_SHORT).show();
+                                        if ("Đã duyệt".equals(appt.getStatus())) {
+                                            android.widget.Toast.makeText(getContext(), "Đã gửi yêu cầu hủy lịch đến phòng khám!", android.widget.Toast.LENGTH_LONG).show();
+                                        } else {
+                                            android.widget.Toast.makeText(getContext(), "Đã hủy lịch hẹn thành công!", android.widget.Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     Navigation.findNavController(v).popBackStack();
                                 }
