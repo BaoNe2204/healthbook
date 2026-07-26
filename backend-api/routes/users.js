@@ -195,13 +195,13 @@ router.post('/reviews', verifyToken, async (req, res) => {
     try {
         const db = req.db;
         const uid = req.user.uid;
-        const doctorId = req.body.doctorId || req.body.doctor_id;
+        const doctorId = req.body.doctorId || req.body.doctor_id || 'APP_GENERAL';
         const appointmentId = req.body.appointmentId || req.body.appointment_id;
         const rating = req.body.rating;
         const comment = req.body.comment;
         
-        if (!doctorId || !rating) {
-            return res.status(400).json({ error: 'doctorId and rating are required' });
+        if (!rating) {
+            return res.status(400).json({ error: 'rating is required' });
         }
 
         const reviewData = {
@@ -215,20 +215,26 @@ router.post('/reviews', verifyToken, async (req, res) => {
 
         const docRef = await db.collection('Reviews').add(reviewData);
 
-        // Calculate new average rating for the doctor
-        const snapshot = await db.collection('Reviews').where('doctor_id', '==', doctorId).get();
-        let totalRating = 0;
-        let count = 0;
-        snapshot.forEach(doc => {
-            totalRating += doc.data().rating;
-            count++;
-        });
-        const avgRating = count > 0 ? (totalRating / count).toFixed(1) : 5.0;
+        // If this review is for a specific doctor, calculate new average rating
+        if (doctorId !== 'APP_GENERAL') {
+            try {
+                const snapshot = await db.collection('Reviews').where('doctor_id', '==', doctorId).get();
+                let totalRating = 0;
+                let count = 0;
+                snapshot.forEach(doc => {
+                    totalRating += doc.data().rating;
+                    count++;
+                });
+                const avgRating = count > 0 ? (totalRating / count).toFixed(1) : 5.0;
 
-        await db.collection('Doctors').doc(doctorId).update({
-            rating: parseFloat(avgRating),
-            reviewCount: count
-        });
+                await db.collection('Doctors').doc(doctorId).update({
+                    rating: parseFloat(avgRating),
+                    reviewCount: count
+                });
+            } catch (err) {
+                console.error("Error updating doctor rating summary:", err);
+            }
+        }
 
         reviewData.id = docRef.id;
         res.status(201).json(reviewData);

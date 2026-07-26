@@ -23,9 +23,7 @@ public class AccountFragment extends Fragment {
 
         view.findViewById(R.id.btnPersonalInfo).setOnClickListener(v -> 
             Navigation.findNavController(v).navigate(R.id.action_account_to_personalInfo));
-            
-        view.findViewById(R.id.btnVipMember).setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.action_account_to_vipMember));
+
             
         view.findViewById(R.id.btnRelatives).setOnClickListener(v -> 
             Navigation.findNavController(v).navigate(R.id.action_account_to_relatives));
