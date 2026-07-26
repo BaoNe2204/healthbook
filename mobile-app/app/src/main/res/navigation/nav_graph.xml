@@ -37,9 +37,6 @@
             android:id="@+id/action_account_to_personalInfo"
             app:destination="@id/personalInfoFragment" />
         <action
-            android:id="@+id/action_account_to_vipMember"
-            app:destination="@id/vipMemberFragment" />
-        <action
             android:id="@+id/action_account_to_relatives"
             app:destination="@id/relativesFragment" />
         <action
