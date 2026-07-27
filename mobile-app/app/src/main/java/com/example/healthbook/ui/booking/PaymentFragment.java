@@ -119,6 +119,9 @@ public class PaymentFragment extends Fragment {
             } else {
                 Doctor dummyDoctor = new Doctor();
                 dummyDoctor.setId("1");
+                dummyDoctor.setName("Bác sĩ Mặc định");
+                dummyDoctor.setSpecialty("Đa khoa");
+                dummyDoctor.setHospital("Phòng khám tư");
                 appt.setDoctor(dummyDoctor);
             }
             

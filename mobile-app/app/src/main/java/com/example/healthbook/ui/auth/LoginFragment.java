@@ -69,6 +69,11 @@ public class LoginFragment extends Fragment {
                                 if (getActivity() instanceof com.example.healthbook.MainActivity) {
                                     ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole("doctor");
                                 }
+                            } else if (email.equals("clinic@healthbook.com")) {
+                                if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+                                if (getActivity() instanceof com.example.healthbook.MainActivity) {
+                                    ((com.example.healthbook.MainActivity) getActivity()).setupNavigationForRole("clinic");
+                                }
                             } else {
                                 fetchRoleAndNavigate();
                             }

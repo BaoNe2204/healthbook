@@ -114,8 +114,8 @@ public class BookingFlowFragment extends Fragment {
         }
 
         // Step 4 interactions
-        populateTimes(view.findViewById(R.id.gridTimeMorning), Arrays.asList("07:30-08:00", "08:00-08:30", "08:30-09:00", "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00", "11:00-11:30", "11:30-12:00"));
-        populateTimes(view.findViewById(R.id.gridTimeAfternoon), Arrays.asList("13:00-13:30", "13:30-14:00", "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00", "16:00-16:30", "16:30-17:00"));
+        populateTimes(view.findViewById(R.id.gridTimeMorning), Arrays.asList("07:30-08:00", "08:00-08:30", "08:30-09:00", "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00", "11:00-11:30", "11:30-12:00"), new java.util.ArrayList<>());
+        populateTimes(view.findViewById(R.id.gridTimeAfternoon), Arrays.asList("13:00-13:30", "13:30-14:00", "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00", "16:00-16:30", "16:30-17:00"), new java.util.ArrayList<>());
 
         // Load Patient info from Firebase & SharedPreferences
         android.content.SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", android.content.Context.MODE_PRIVATE);
@@ -462,7 +462,8 @@ public class BookingFlowFragment extends Fragment {
                     }
                     tv.setBackgroundColor(Color.parseColor("#212121"));
                     tv.setTextColor(Color.WHITE);
-                    nextStep();
+                    
+                    fetchScheduleAndShowTimes(getView());
                 });
             }
 
@@ -470,14 +471,62 @@ public class BookingFlowFragment extends Fragment {
         }
     }
 
-    private void populateTimes(GridLayout grid, List<String> times) {
+    private void fetchScheduleAndShowTimes(View view) {
+        if (view == null) return;
+        
+        GridLayout gridMorning = view.findViewById(R.id.gridTimeMorning);
+        GridLayout gridAfternoon = view.findViewById(R.id.gridTimeAfternoon);
+        
+        if (gridMorning == null || gridAfternoon == null) {
+            nextStep();
+            return;
+        }
+        
+        gridMorning.removeAllViews();
+        gridAfternoon.removeAllViews();
+        
+        com.example.healthbook.network.RetrofitClient.getInstance().getApiService().getClinicScheduleForBooking("Phòng khám tư", selectedDate).enqueue(new retrofit2.Callback<List<String>>() {
+            @Override
+            public void onResponse(retrofit2.Call<List<String>> call, retrofit2.Response<List<String>> response) {
+                List<String> busySlots = new java.util.ArrayList<>();
+                if (response.isSuccessful() && response.body() != null) {
+                    busySlots = response.body();
+                }
+                
+                populateTimes(gridMorning, Arrays.asList("07:30-08:00", "08:00-08:30", "08:30-09:00", "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00", "11:00-11:30", "11:30-12:00"), busySlots);
+                populateTimes(gridAfternoon, Arrays.asList("13:00-13:30", "13:30-14:00", "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00", "16:00-16:30", "16:30-17:00"), busySlots);
+                
+                nextStep();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<String>> call, Throwable t) {
+                populateTimes(gridMorning, Arrays.asList("07:30-08:00", "08:00-08:30", "08:30-09:00", "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00", "11:00-11:30", "11:30-12:00"), new java.util.ArrayList<>());
+                populateTimes(gridAfternoon, Arrays.asList("13:00-13:30", "13:30-14:00", "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00", "16:00-16:30", "16:30-17:00"), new java.util.ArrayList<>());
+                
+                nextStep();
+            }
+        });
+    }
+
+    private void populateTimes(GridLayout grid, List<String> times, List<String> busySlots) {
         for (String time : times) {
             TextView tv = new TextView(getContext());
             tv.setText(time);
             tv.setGravity(Gravity.CENTER);
             tv.setTextSize(13f);
-            tv.setTextColor(Color.parseColor("#424242"));
-            tv.setBackgroundResource(R.drawable.bg_border_rounded_grey);
+            
+            boolean isBusy = busySlots != null && busySlots.contains(time);
+            
+            if (isBusy) {
+                tv.setTextColor(Color.parseColor("#BDBDBD"));
+                tv.setBackgroundResource(R.drawable.bg_border_rounded_grey);
+                tv.setEnabled(false);
+            } else {
+                tv.setTextColor(Color.parseColor("#424242"));
+                tv.setBackgroundResource(R.drawable.bg_border_rounded_grey);
+                tv.setEnabled(true);
+            }
             
             float density = getResources().getDisplayMetrics().density;
             
@@ -488,10 +537,12 @@ public class BookingFlowFragment extends Fragment {
             params.setMargins((int)(4 * density), (int)(4 * density), (int)(4 * density), (int)(4 * density));
             tv.setLayoutParams(params);
 
-            tv.setOnClickListener(v -> {
-                selectedTime = time.split("-")[0]; // Just take start time
-                nextStep();
-            });
+            if (!isBusy) {
+                tv.setOnClickListener(v -> {
+                    selectedTime = time.split("-")[0]; // Just take start time
+                    nextStep();
+                });
+            }
             grid.addView(tv);
         }
     }

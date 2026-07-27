@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_clinic_dashboard"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Đơn khám" />
+    <item
+        android:id="@+id/navigation_clinic_schedule"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Lịch khám" />
+    <item
+        android:id="@+id/navigation_clinic_revenue"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Doanh thu" />
+    <item
+        android:id="@+id/navigation_clinic_chat_list"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:title="Tin nhắn" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Tài khoản" />
+</menu>

@@ -45,7 +45,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
 
         holder.itemView.setOnClickListener(v -> {
             android.os.Bundle args = new android.os.Bundle();
-            args.putInt("tabIndex", 2);
+            args.putInt("tabIndex", 3); // 3 là tab Bệnh viện
             androidx.navigation.Navigation.findNavController(v).navigate(R.id.doctorSearchFragment, args);
         });
     }

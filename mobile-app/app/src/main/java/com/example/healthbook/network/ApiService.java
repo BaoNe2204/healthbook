@@ -36,7 +36,7 @@ public interface ApiService {
     Call<Appointment> createAppointment(@Body Appointment appointment);
 
     @retrofit2.http.PUT("/api/appointments/{id}/cancel")
-    Call<Void> cancelAppointment(@retrofit2.http.Path("id") String id);
+    Call<Void> cancelAppointment(@retrofit2.http.Path("id") String id, @Body Map<String, String> body);
 
     @POST("/api/users/register")
     Call<Void> registerUser(@Body Map<String, String> body);
@@ -122,4 +122,26 @@ public interface ApiService {
 
     @GET("/api/doctor/my-patients")
     Call<List<com.example.healthbook.data.models.Patient>> getDoctorMyPatients();
+
+    // Clinic Panel Endpoints
+    @GET("/api/clinic/appointments")
+    Call<List<Appointment>> getClinicAppointments();
+
+    @retrofit2.http.PUT("/api/clinic/appointments/{id}/status")
+    Call<Void> updateClinicAppointmentStatus(@retrofit2.http.Path("id") String id, @Body Map<String, String> body);
+
+    @GET("/api/schedules/clinic")
+    Call<List<String>> getClinicScheduleForBooking(@retrofit2.http.Query("clinicName") String clinicName, @retrofit2.http.Query("date") String date);
+
+    @GET("/api/clinic/schedule")
+    Call<List<String>> getClinicScheduleAdmin(@retrofit2.http.Query("date") String date);
+
+    @POST("/api/clinic/schedule")
+    Call<Void> updateClinicSchedule(@Body Map<String, Object> body);
+
+    @GET("/api/clinic/revenue")
+    Call<Map<String, Object>> getClinicRevenue();
+
+    @GET("/api/clinic/patients")
+    Call<List<com.example.healthbook.data.models.Patient>> getClinicPatients();
 }

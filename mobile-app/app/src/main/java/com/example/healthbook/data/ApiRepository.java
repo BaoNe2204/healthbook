@@ -94,8 +94,12 @@ public class ApiRepository {
         });
     }
 
-    public void cancelAppointment(String id, Callback<Void> callback) {
-        RetrofitClient.getInstance().getApiService().cancelAppointment(id).enqueue(new retrofit2.Callback<Void>() {
+    public void cancelAppointment(String id, String reason, Callback<Void> callback) {
+        java.util.Map<String, String> body = new java.util.HashMap<>();
+        if (reason != null && !reason.isEmpty()) {
+            body.put("reason", reason);
+        }
+        RetrofitClient.getInstance().getApiService().cancelAppointment(id, body).enqueue(new retrofit2.Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -143,6 +147,48 @@ public class ApiRepository {
 
             @Override
             public void onFailure(Call<List<com.example.healthbook.data.models.Clinic>> call, Throwable t) {
+                callback.onFailure(new Exception(t));
+            }
+        });
+    }
+
+    public void getClinicAppointments(Callback<List<Appointment>> callback) {
+        RetrofitClient.getInstance().getApiService().getClinicAppointments().enqueue(new retrofit2.Callback<List<Appointment>>() {
+            @Override
+            public void onResponse(Call<List<Appointment>> call, Response<List<Appointment>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onFailure(new Exception("API Error: " + response.code() + " " + response.errorBody().string()));
+                    } catch (Exception ex) {
+                        callback.onFailure(new Exception("API Error: " + response.code()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Appointment>> call, Throwable t) {
+                callback.onFailure(new Exception(t));
+            }
+        });
+    }
+
+    public void updateClinicAppointmentStatus(String id, String status, Callback<Void> callback) {
+        java.util.Map<String, String> body = new java.util.HashMap<>();
+        body.put("status", status);
+        RetrofitClient.getInstance().getApiService().updateClinicAppointmentStatus(id, body).enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onFailure(new Exception("API Error updating clinic appointment status"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 callback.onFailure(new Exception(t));
             }
         });

@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
                     id == R.id.navigation_account || id == R.id.navigation_doctor_home ||
                     id == R.id.navigation_doctor_schedule || id == R.id.navigation_doctor_appointments ||
                     id == R.id.navigation_admin_dashboard || id == R.id.navigation_admin_users ||
-                    id == R.id.navigation_admin_hospitals) {
+                    id == R.id.navigation_admin_hospitals || id == R.id.navigation_clinic_dashboard ||
+                    id == R.id.navigation_clinic_schedule || id == R.id.navigation_clinic_revenue ||
+                    id == R.id.navigation_clinic_chat_list) {
                     binding.navView.setVisibility(android.view.View.VISIBLE);
                 } else {
                     binding.navView.setVisibility(android.view.View.GONE);
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (role.equalsIgnoreCase("doctor")) {
             binding.navView.inflateMenu(R.menu.bottom_nav_menu_doctor);
             navController.navigate(R.id.navigation_doctor_home);
+        } else if (role.equalsIgnoreCase("clinic")) {
+            binding.navView.inflateMenu(R.menu.bottom_nav_menu_clinic);
+            navController.navigate(R.id.navigation_clinic_dashboard);
         } else {
             binding.navView.inflateMenu(R.menu.bottom_nav_menu);
             navController.navigate(R.id.navigation_home);

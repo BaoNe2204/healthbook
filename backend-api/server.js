@@ -299,7 +299,14 @@ app.put('/api/appointments/:id/cancel', verifyToken, async (req, res) => {
             return res.status(403).json({ error: 'Unauthorized' });
         }
 
-        await docRef.update({ status: 'Đã hủy' });
+        const reason = req.body.reason || '';
+
+        if (doc.data().status === 'Đã duyệt') {
+            await docRef.update({ status: 'Yêu cầu hủy', cancel_reason: reason });
+            return res.json({ message: 'Requested cancellation successfully' });
+        }
+
+        await docRef.update({ status: 'Đã hủy', cancel_reason: reason });
         res.json({ message: 'Appointment cancelled successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -329,6 +336,212 @@ app.get('/api/doctors/:id/schedule', async (req, res) => {
             const slots = data.time_slots ? data.time_slots.split(',') : [];
             res.json(slots);
         }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Clinic's Appointments
+app.get('/api/clinic/appointments', verifyToken, async (req, res) => {
+    try {
+        const uid = req.user.uid;
+        const userDoc = await db.collection('Users').doc(uid).get();
+        let clinicName = "Phòng khám tư"; // fallback for test account
+        if (userDoc.exists && userDoc.data().clinic_name) {
+            clinicName = userDoc.data().clinic_name;
+        }
+
+        const snapshot = await db.collection('Appointments')
+            .where('hospital', '==', clinicName)
+            .get();
+        
+        const appointments = [];
+        snapshot.forEach(doc => {
+            appointments.push({ id: doc.id, ...doc.data() });
+        });
+        
+        appointments.sort((a, b) => {
+            return new Date(b.appointment_date) - new Date(a.appointment_date);
+        });
+        
+        res.json(appointments);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PUT Clinic Appointment Status
+app.put('/api/clinic/appointments/:id/status', verifyToken, async (req, res) => {
+    try {
+        const appointmentId = req.params.id;
+        const newStatus = req.body.status;
+        const docRef = db.collection('Appointments').doc(appointmentId);
+        
+        await docRef.update({ status: newStatus });
+        res.json({ message: 'Updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Clinic Schedule
+app.get('/api/clinic/schedule', verifyToken, async (req, res) => {
+    try {
+        const uid = req.user.uid;
+        const userDoc = await db.collection('Users').doc(uid).get();
+        let clinicName = "Phòng khám tư"; 
+        if (userDoc.exists && userDoc.data().clinic_name) {
+            clinicName = userDoc.data().clinic_name;
+        }
+
+        const date = req.query.date;
+        const docId = `${clinicName}_${date}`;
+        
+        const docRef = db.collection('ClinicSchedules').doc(docId);
+        const doc = await docRef.get();
+        
+        if (!doc.exists) {
+            res.json([]);
+        } else {
+            const data = doc.data();
+            const slots = data.busy_slots ? data.busy_slots.split(',') : [];
+            res.json(slots);
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST Clinic Schedule
+app.post('/api/clinic/schedule', verifyToken, async (req, res) => {
+    try {
+        const uid = req.user.uid;
+        const userDoc = await db.collection('Users').doc(uid).get();
+        let clinicName = "Phòng khám tư";
+        if (userDoc.exists && userDoc.data().clinic_name) {
+            clinicName = userDoc.data().clinic_name;
+        }
+
+        const data = req.body;
+        const date = data.date;
+        const busySlots = (data.busy_slots || []).join(',');
+        const docId = `${clinicName}_${date}`;
+        
+        await db.collection('ClinicSchedules').doc(docId).set({
+            clinic_name: clinicName,
+            available_date: date,
+            busy_slots: busySlots,
+            updated_at: new Date().toISOString()
+        });
+        
+        res.json({ message: 'Schedule updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Clinic Revenue
+app.get('/api/clinic/revenue', verifyToken, async (req, res) => {
+    try {
+        const uid = req.user.uid;
+        const userDoc = await db.collection('Users').doc(uid).get();
+        let clinicName = "Phòng khám tư";
+        if (userDoc.exists && userDoc.data().clinic_name) {
+            clinicName = userDoc.data().clinic_name;
+        }
+        
+        const snapshot = await db.collection('Appointments')
+            .where('hospital', '==', clinicName)
+            .get();
+            
+        let totalRevenue = 0;
+        let successfulAppointments = 0;
+        let cancelledAppointments = 0;
+        let recentAppointments = [];
+        
+        // monthlyRevenue[1-12] stores revenue for each month in the current year
+        const currentYear = new Date().getFullYear();
+        let monthlyRevenue = {
+            1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 
+            7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0
+        };
+        
+        snapshot.forEach(doc => {
+            const data = { id: doc.id, ...doc.data() };
+            
+            if (data.status === 'Đã hoàn thành' || data.status === 'Đã khám' || data.status === 'Đã thanh toán' || data.status === 'Đã qua') {
+                successfulAppointments++;
+                // Assuming each appointment costs 200,000 VND
+                const amount = 200000;
+                totalRevenue += amount; 
+                recentAppointments.push(data);
+                
+                // Group by month
+                if (data.appointment_date) {
+                    // Format: dd/MM/yyyy
+                    const parts = data.appointment_date.split('/');
+                    if (parts.length === 3) {
+                        const month = parseInt(parts[1], 10);
+                        const year = parseInt(parts[2], 10);
+                        if (year === currentYear && monthlyRevenue[month] !== undefined) {
+                            monthlyRevenue[month] += amount;
+                        }
+                    }
+                }
+            } else if (data.status === 'Đã hủy') {
+                cancelledAppointments++;
+                recentAppointments.push(data);
+            }
+        });
+        
+        recentAppointments.sort((a, b) => {
+            return new Date(b.appointment_date) - new Date(a.appointment_date);
+        });
+        
+        // Take top 20 recent appointments
+        recentAppointments = recentAppointments.slice(0, 20);
+        
+        res.json({
+            total_revenue: totalRevenue,
+            successful_appointments: successfulAppointments,
+            cancelled_appointments: cancelledAppointments,
+            recent_appointments: recentAppointments,
+            monthly_revenue: monthlyRevenue
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET Clinic Patients
+app.get('/api/clinic/patients', verifyToken, async (req, res) => {
+    try {
+        const uid = req.user.uid;
+        const userDoc = await db.collection('Users').doc(uid).get();
+        let clinicName = "Phòng khám tư";
+        if (userDoc.exists && userDoc.data().clinic_name) {
+            clinicName = userDoc.data().clinic_name;
+        }
+        
+        const snapshot = await db.collection('Appointments')
+            .where('hospital', '==', clinicName)
+            .get();
+            
+        const patientMap = new Map();
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.patient_id && !patientMap.has(data.patient_id)) {
+                patientMap.set(data.patient_id, {
+                    id: data.patient_id,
+                    name: data.patient_name || 'Bệnh nhân',
+                    phone: data.patient_phone || '',
+                    avatar: ''
+                });
+            }
+        });
+        
+        res.json(Array.from(patientMap.values()));
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

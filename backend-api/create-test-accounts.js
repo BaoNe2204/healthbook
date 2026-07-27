@@ -40,6 +40,13 @@ const testAccounts = [
         password: 'password123',
         displayName: 'BS.CKI Phạm Thị Mai',
         role: 'DOCTOR'
+    },
+    {
+        email: 'clinic@healthbook.com',
+        password: 'password123',
+        displayName: 'Phòng khám tư',
+        role: 'clinic',
+        clinic_name: 'Phòng khám tư'
     }
 ];
 
@@ -74,6 +81,7 @@ async function createAccounts() {
                 displayName: account.displayName,
                 email: account.email,
                 role: account.role,
+                clinic_name: account.clinic_name || null,
                 phone: '0123456789'
             }, { merge: true });
 

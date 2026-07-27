@@ -46,6 +46,9 @@ public class Appointment implements java.io.Serializable {
     @SerializedName("patient_gender")
     private String patient_gender;
 
+    @SerializedName("cancel_reason")
+    private String cancelReason;
+
     public Appointment() {}
 
     public Appointment(String id, Doctor doctor, String date, String time, String status, String type) {
@@ -95,6 +98,9 @@ public class Appointment implements java.io.Serializable {
     public String getDoctorId() { return doctor_id; }
     public void setDoctorId(String doctor_id) { this.doctor_id = doctor_id; }
     
+    public String getDoctorName() { return doctorName; }
+    public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
+    
     public String getPatient_name() { return patient_name; }
     public void setPatient_name(String patient_name) { this.patient_name = patient_name; }
     public String getPatient_phone() { return patient_phone; }
@@ -105,5 +111,7 @@ public class Appointment implements java.io.Serializable {
     public void setPatient_gender(String patient_gender) { this.patient_gender = patient_gender; }
     public String getPatient_id() { return patient_id; }
     public void setPatient_id(String patient_id) { this.patient_id = patient_id; }
+    public String getCancelReason() { return cancelReason; }
+    public void setCancelReason(String cancelReason) { this.cancelReason = cancelReason; }
 }
 

@@ -117,13 +117,12 @@ public class ChatActivity extends AppCompatActivity {
         });
         
         // Cập nhật last message info
-        db.collection("Chats").document(chatId).set(
-                new java.util.HashMap<String, Object>() {{
-                    put("lastMessage", text);
-                    put("timestamp", timestamp);
-                    put("user1", currentUserId);
-                    put("user2", otherUserId);
-                }}
-        );
+        java.util.Map<String, Object> chatInfo = new java.util.HashMap<>();
+        chatInfo.put("lastMessage", text);
+        chatInfo.put("timestamp", timestamp);
+        chatInfo.put("user1", currentUserId);
+        chatInfo.put("user2", otherUserId);
+        
+        db.collection("Chats").document(chatId).set(chatInfo);
     }
 }
